@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coaching Institute ERP - Login</title>
+  <link rel="stylesheet" href="/ERP-SYSTEM-FOR-COACHING/public/css/style.css">
+  <script>
+    function generateCaptcha() {
+      var captcha = Math.floor(1000 + Math.random() * 9000);
+      document.getElementById("showCaptcha").innerText = captcha;
+      document.getElementById("realCaptcha").value = captcha;
+    }
+
+    function checkCaptcha() {
+      var role = document.getElementById("roleSelect").value;
+      if (role === "admin") return true;
+
+      var real = document.getElementById("realCaptcha").value;
+      var user = document.getElementById("userCaptcha").value;
+
+      if (real !== user) {
+        alert("Wrong Captcha");
+        generateCaptcha();
+        document.getElementById("userCaptcha").value = "";
+        return false;
+      }
+      return true;
+    }
+
+    function checkPasswordStrength() {
+      var password = document.getElementById("password").value;
+
+      var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^~_-])[A-Za-z\d@$!%*?&#^~_-]{8,}$/;
+
+      if (!regex.test(password)) {
+        alert("Password must be at least 8 characters long and contain:\n- At least 1 uppercase letter\n- At least 1 lowercase letter\n- At least 1 number\n- At least 1 special character (@$!%*?&#^~_-)");
+        return false;
+      }
+      return true;
+    }
+
+    function validateForm() {
+      return checkPasswordStrength() && checkCaptcha();
+    }
+
+    function switchRole() {
+      var role = document.getElementById("roleSelect").value;
+      var heading = document.getElementById("login_heading");
+      var usernameInput = document.getElementById("login_user");
+      var inputLabel = document.getElementById("user_label");
+      var form = document.getElementById("loginForm");
+      var captchaBox = document.getElementById("captchaBox");
+      var userCaptcha = document.getElementById("userCaptcha");
+      var studentExtras = document.getElementById("studentExtras");
+
+      if (role === "student") {
+        heading.innerText = "Student Sign In";
+        form.action = "student_login.php";
+        inputLabel.innerText = "Phone Number";
+        usernameInput.type = "tel";
+        usernameInput.name = "phone";
+        usernameInput.placeholder = "Enter your phone number";
+        captchaBox.style.display = "flex";
+        userCaptcha.required = true;
+        studentExtras.style.display = "flex";
+        generateCaptcha();
+      } else if (role === "teacher") {
+        heading.innerText = "Teacher Sign In";
+        form.action = "#"; 
+        inputLabel.innerText = "Teacher User ID";
+        usernameInput.type = "text";
+        usernameInput.name = "userid";
+        usernameInput.placeholder = "Enter your User ID";
+        captchaBox.style.display = "flex";
+        userCaptcha.required = true;
+        studentExtras.style.display = "none";
+        generateCaptcha();
+      } else if (role === "admin") {
+        heading.innerText = "Admin Sign In";
+        form.action = "super_admin.html"; 
+        inputLabel.innerText = "Admin Username";
+        usernameInput.type = "text";
+        usernameInput.name = "userid";
+        usernameInput.placeholder = "Enter your username";
+        captchaBox.style.display = "none";
+        userCaptcha.required = false;
+        studentExtras.style.display = "none";
+      }
+    }
+  </script>
+</head>
+<body onload="switchRole()">
+
+  <div class="main">
+    <div class="brand-header">
+      <div class="brand-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
+      <h2 id="main_heading">Coaching ERP</h2>
+    </div>
+
+    <div class="sub-header">
+      <h3 id="login_heading">Sign In</h3>
+      <p class="sub-desc">Select your portal role to continue</p>
+    </div>
+
+    <form id="loginForm" action="student_login.php" method="post" class="form" onsubmit="return validateForm();">
+      <div class="field-group">
+        <label class="field-label" for="roleSelect">Account Type</label>
+        <select id="roleSelect" class="role-selector" onchange="switchRole()">
+          <option value="student">Student</option>
+          <option value="teacher">Teacher</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" id="user_label" for="login_user">Phone Number</label>
+        <input type="tel" name="phone" id="login_user" placeholder="Enter your phone number" required autocomplete="username">
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="password">Password</label>
+        <input 
+          type="password" 
+          name="password" 
+          id="password" 
+          placeholder="••••••••" 
+          required 
+          autocomplete="current-password"
+        >
+      </div>
+
+      <div class="captcha-box" id="captchaBox">
+        <span class="captcha-title">Security Code</span>
+        <h1 id="showCaptcha">----</h1>
+        <input type="text" name="userCaptcha" id="userCaptcha" placeholder="Enter the code shown above">
+        <input type="hidden" name="realCaptcha" id="realCaptcha">
+      </div>
+
+      <button type="submit" id="login">Sign In</button>
+
+      <div id="studentExtras">
+        <button type="button" id="forgot_pass">Forgot password?</button>
+        <a id="register_btn_login" href="/ERP-SYSTEM-FOR-COACHING/students/html/student_register.html">Not registered? Create an account</a>
+      </div>
+    </form>
+  </div>
+
+</body>
+</html>
