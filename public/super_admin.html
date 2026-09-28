@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Super Admin Dashboard</title>
+  <link rel="stylesheet" href="/ERP-SYSTEM-FOR-COACHING/public/css/dashboard.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-icon">
+        <i class="fa-solid fa-shield-halved"></i>
+      </div>
+      <h2>SuperAdmin</h2>
+    </div>
+
+    <ul class="nav-links">
+      <li class="nav-item active">
+        <a href="#">
+          <i class="fa-solid fa-chart-pie"></i>
+          <span>Dashboard</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#">
+          <i class="fa-solid fa-book-open"></i>
+          <span>Courses</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#">
+          <i class="fa-solid fa-user-graduate"></i>
+          <span>Student Management</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#">
+          <i class="fa-solid fa-chalkboard-user"></i>
+          <span>Teacher Management</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#">
+          <i class="fa-solid fa-credit-card"></i>
+          <span>Subscription</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#">
+          <i class="fa-solid fa-user-shield"></i>
+          <span>Roles</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#">
+          <i class="fa-solid fa-gear"></i>
+          <span>Settings</span>
+        </a>
+      </li>
+    </ul>
+
+    <div class="sidebar-footer">
+      <a href="admin_login.html" class="logout-btn">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+  </aside>
+  <main class="main-content">
+    <div class="content-header">
+      <div class="header-text">
+        <h2>Super Admin Overview</h2>
+        <p>Real-time coaching institute operational and revenue analytics</p>
+      </div>
+      <div class="date-filter">
+        <button class="filter-btn">Day</button>
+        <button class="filter-btn">Week</button>
+        <button class="filter-btn active">Month</button>
+        <button class="filter-btn">Year</button>
+      </div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-header">
+          <span class="stat-title">Gross Revenue</span>
+        </div>
+        <div class="stat-value">₹0</div>
+        <div class="stat-subtitle">vs ₹0 last month</div>
+      </div>
+    
+      <div class="stat-card">
+        <div class="stat-header">
+          <span class="stat-title">Pending Overdue Fees</span>
+        </div>
+        <div class="stat-value">₹0</div>
+        <div class="stat-subtitle">Requires collection followup</div>
+      </div>
+    
+      <div class="stat-card">
+        <div class="stat-header">
+          <span class="stat-title">Active Enrolled Students</span>
+        </div>
+        <div class="stat-value">0</div>
+        <div class="stat-subtitle">Across 0 running batches</div>
+      </div>
+    
+      <div class="stat-card">
+        <div class="stat-header">
+          <span class="stat-title">Lead Conversion Rate</span>
+        </div>
+        <div class="stat-value">0</div>
+        <div class="stat-subtitle">Trials to full enrollments</div>
+      </div>
+    </div>
+    
+    <div class="analytics-grid">
+      <div class="panel chart-panel">
+        <div class="panel-header">
+          <div>
+            <h3 class="panel-title">Revenue & Expense Trajectory</h3>
+            <p class="panel-subtitle">Monthly breakdown of fee collection vs operational payout</p>
+          </div>
+          <div class="chart-legend">
+            <span class="legend-item"><span class="dot revenue"></span> Revenue</span>
+            <span class="legend-item"><span class="dot expenses"></span> Expenses</span>
+          </div>
+        </div>
+        <div class="chart-area">
+          <div class="chart-axis-line"></div>
+        </div>
+      </div>
+    
+      <div class="panel occupancy-panel">
+        <div class="panel-header">
+          <div>
+            <h3 class="panel-title">Batch Seat Occupancy</h3>
+            <p class="panel-subtitle">Classroom capacity distribution</p>
+          </div>
+        </div>
+    
+        <div class="occupancy-list">
+          <div class="occupancy-item">
+            <div class="occupancy-labels">
+              <span class="course-name">NEET</span>
+              <span class="course-stats">0% (0/0)</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill fill-blue" style="width: 0%;"></div>
+            </div>
+          </div>
+    
+          <div class="occupancy-item">
+            <div class="occupancy-labels">
+              <span class="course-name">JEE</span>
+              <span class="course-stats">0% (0/0)</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill fill-blue" style="width: 0%;"></div>
+            </div>
+          </div>
+    
+          <div class="occupancy-item">
+            <div class="occupancy-labels">
+              <span class="course-name">CA Foundation</span>
+              <span class="course-stats">0% (0/0/)</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill fill-blue" style="width: 0%;"></div>
+            </div>
+          </div>
+    
+          <div class="occupancy-item">
+            <div class="occupancy-labels">
+              <span class="course-name">UPSC</span>
+              <span class="course-stats">0% (0/0)</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill fill-blue" style="width: 0%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-grid">
+      <div class="panel collections-panel">
+        <div class="panel-header">
+          <div>
+            <h3 class="panel-title">Overdue Fee Collections</h3>
+            <p class="panel-subtitle">High-priority student installment follow-ups</p>
+          </div>
+          <button class="btn-export">Export CSV</button>
+        </div>
+    
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>STUDENT</th>
+                <th>BATCH</th>
+                <th>DUE AMOUNT</th>
+                <th>DAYS LATE</th>
+                <th>PARENT CONTACT</th>
+                <th>ACTION</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- <tr>
+                <td class="cell-primary">Rohan Gupta</td>
+                <td class="cell-muted">Physics JEE-Adv</td>
+                <td class="cell-amount">₹450.00</td>
+                <td><span class="late-badge badge-high">14 Days</span></td>
+                <td class="cell-muted">+91 98765-43210</td>
+                <td><button class="btn-remind">Remind</button></td>
+              </tr>
+              <tr>
+                <td class="cell-primary">Ananya Sharma</td>
+                <td class="cell-muted">NEET</td>
+                <td class="cell-amount">₹300.00</td>
+                <td><span class="late-badge badge-medium">9 Days</span></td>
+                <td class="cell-muted">+91 98451-22345</td>
+                <td><button class="btn-remind">Remind</button></td>
+              </tr>
+              <tr>
+                <td class="cell-primary">David Miller</td>
+                <td class="cell-muted">CA Foundations</td>
+                <td class="cell-amount">₹620.00</td>
+                <td><span class="late-badge badge-low">4 Days</span></td>
+                <td class="cell-muted">+1 555-019-2834</td>
+                <td><button class="btn-remind">Remind</button></td>
+              </tr>
+              <tr>
+                <td class="cell-primary">Sanya Patel</td>
+                <td class="cell-muted">NEET Biology Crash</td>
+                <td class="cell-amount">₹280.00</td>
+                <td><span class="late-badge badge-low">3 Days</span></td>
+                <td class="cell-muted">+91 97112-90987</td>
+                <td><button class="btn-remind">Remind</button></td>
+              </tr> -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    
+      <div class="panel purchases-panel">
+        <div class="panel-header">
+          <div>
+            <h3 class="panel-title">Real-Time Purchases</h3>
+            <p class="panel-subtitle">Live transactions & payment feed</p>
+          </div>
+        </div>
+    
+        <div class="timeline">
+          <div class="timeline-item">
+            <!-- <span class="timeline-dot dot-cyan"></span>
+            <div class="timeline-content"> -->
+              <!-- <p class="timeline-text"><strong>Riya Sen</strong> purchased <strong>Full Stack CA Foundation</strong></p>
+              <span class="timeline-meta">3 minutes ago • Paid via Card (₹450)</span>
+            </div>
+          </div>
+    
+          <div class="timeline-item">
+            <span class="timeline-dot dot-emerald"></span>
+            <div class="timeline-content">
+              <p class="timeline-text"><strong>Arjun Mehta</strong> enrolled in <strong>Physics JEE-Adv</strong></p>
+              <span class="timeline-meta">18 minutes ago • Paid via UPI (₹600)</span>
+            </div>
+          </div>
+    
+          <div class="timeline-item">
+            <span class="timeline-dot dot-emerald"></span>
+            <div class="timeline-content">
+              <p class="timeline-text"><strong>ggs</strong> subscribed to <strong>NEET</strong></p>
+              <span class="timeline-meta">45 minutes ago • Paid via NetBanking (₹80)</span>
+            </div>
+          </div>
+    
+          <div class="timeline-item">
+            <span class="timeline-dot dot-slate"></span>
+            <div class="timeline-content">
+              <p class="timeline-text"><strong>Karan Rao</strong> renewed <strong>NEET</strong></p>
+              <span class="timeline-meta">2 hours ago • Paid via UPI (₹320)</span>
+            </div>
+          </div>
+        </div> -->
+      </div>
+    </div>
+  </main>
+</body>
+</html>

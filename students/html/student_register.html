@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Registration</title>
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="register-card">
+
+            <div class="top">
+                <i class="fa-solid fa-user-graduate"></i>
+                <h2>Student Registration</h2>
+                <p>Create a new student account</p>
+            </div>
+
+            <form class="form">
+
+                <div class="grid">
+
+                    <div class="input-box">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" id="name" placeholder="Full Name">
+                    </div>
+
+                    <div class="input-box">
+                        <i class="fa-solid fa-phone"></i>
+                        <input type="tel" id="phone" placeholder="Phone Number">
+                    </div>
+
+                    <div class="input-box">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="email" placeholder="Email">
+                    </div>
+
+                    <div class="input-box">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="password" placeholder="Password">
+                    </div>
+
+                    <div class="input-box">
+                        <i class="fa-solid fa-book-open"></i>
+                        <select id="course_id">
+                            <option selected disabled>Select Course</option>
+                            <option>JEE</option>
+                            <option>NEET</option>
+                            <option>Foundation</option>
+                        </select>
+                    </div>
+
+                    <div class="input-box">
+                        <i class="fa-solid fa-layer-group"></i>
+                        <select id="batch_id">
+                            <option selected disabled>Select Batch</option>
+                            <option>Batch A</option>
+                            <option>Batch B</option>
+                        </select>
+                    </div>
+
+                    <!-- Full width -->
+                    <div class="input-box full">
+                        <i class="fa-solid fa-calendar-days"></i>
+                        <input type="date" id="admission_date">
+                    </div>
+
+                </div>
+
+                <button class="register-btn">
+                    <i class="fa-solid fa-user-plus"></i>
+                    Register
+                </button>
+
+                <a href="../../public//auth//login.html" class="login-link">
+                    Already have an account? Login
+                </a>
+
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="/js/student_register.js"></script>
+</body>
+
+</html>

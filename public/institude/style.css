@@ -1,0 +1,124 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Poppins, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    background: linear-gradient(135deg, #0f172a, #2563eb);
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+.register-card {
+    width: 100%;
+    max-width: 900px;
+    background: #fff;
+    border-radius: 8px;
+    padding: 35px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, .12);
+}
+
+.top {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.top i {
+    font-size: 48px;
+    color: #2563eb;
+    margin-bottom: 10px;
+}
+
+.top h2 {
+    color: #1e293b;
+}
+
+.top p {
+    color: #64748b;
+    font-size: 14px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+.full {
+    grid-column: 1/-1;
+}
+
+.input-box {
+    display: flex;
+    align-items: center;
+    border: 1px solid #dbe3ef;
+    border-radius: 12px;
+    padding: 0 14px;
+    background: #f8fafc;
+}
+
+.input-box i {
+    color: #64748b;
+    width: 20px;
+}
+
+.input-box input,
+.input-box select {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 15px 12px;
+    font-size: 15px;
+}
+
+.input-box:focus-within {
+    border-color: #2563eb;
+    background: #fff;
+}
+
+.register-btn {
+    width: 100%;
+    margin-top: 24px;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    background: #2563eb;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.register-btn:hover {
+    background: #1d4ed8;
+}
+
+@media(max-width:768px) {
+
+    body {
+        padding: 15px;
+    }
+
+    .register-card {
+        padding: 22px;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .full {
+        grid-column: auto;
+    }
+}

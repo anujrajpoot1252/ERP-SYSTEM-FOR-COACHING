@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/public/institude/style.css">
+    <title>Institude Register</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="register-card">
+            <div class="top">
+                <i class="fa-solid fa-school"></i>
+                <h2>Institute Registration</h2>
+                <p>Create a new coaching institute</p>
+            </div>
+
+            <form action="/institude-register" method="POST">
+
+                <div class="grid">
+
+                    <div class="input-box">
+                        <i class="fa-solid fa-building"></i>
+                        <input type="text" placeholder="Institute Name" name="institude_name" required>
+                    </div>
+
+                    <div class="input-box">
+                        <i class="fa-solid fa-code"></i>
+                        <input type="text" placeholder="Subdomain (abc)" name="subdomain" required>
+                    </div>
+
+                    <div class="input-box">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" placeholder="Owner Name" name="owner_name" required>
+                    </div>
+
+                    <div class="input-box">
+                        <i class="fa-solid fa-phone"></i>
+                        <input type="tel" placeholder="Mobile Number" name="phone_number" required>
+                    </div>
+
+                    <div class="input-box">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" placeholder="Official Email" name="email" required>
+                    </div>
+
+                    <div class="input-box">
+                        <i class="fa-solid fa-calendar"></i>
+                        <select name="subscription" required>
+                            <option value="">Subscription</option>
+                            <option>1 Month</option>
+                            <option>6 Months</option>
+                            <option>1 Year</option>
+                            <option>Lifetime</option>
+                        </select>
+                    </div>
+
+                    <div class="input-box full">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <input type="text" placeholder="Institute Address" name="address" required>
+                    </div>
+
+                    <div class="input-box">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" placeholder="Password" name="password">
+                    </div>
+
+                    <div class="input-box">
+                        <i class="fa-solid fa-key"></i>
+                        <input type="password" placeholder="Confirm Password" name="confirm_password">
+                    </div>
+
+                </div>
+
+                <button class="register-btn" type="submit">
+                    <i class="fa-solid fa-circle-plus"></i>
+                    Register Institute
+                </button>
+
+            </form>
+
+        </div>
+    </div>
+
+</body>
+
+</html>
