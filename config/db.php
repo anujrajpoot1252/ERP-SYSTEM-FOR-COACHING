@@ -33,13 +33,13 @@ if (mysqli_num_rows($table_check) == 0) {
     $schema_file = __DIR__ . "/../schema/schema.sql";
     if (file_exists($schema_file)) {
         $sql = file_get_contents($schema_file);
-        // Remove comments
-        $sql = preg_replace('/--.*$/m', '', $sql);
-        $queries = array_filter(array_map('trim', explode(';', $sql)));
-        foreach ($queries as $query) {
-            if (!empty($query)) {
-                mysqli_query($conn, $query);
-            }
+        // Multi query execution
+        if (mysqli_multi_query($conn, $sql)) {
+            do {
+                if ($res = mysqli_store_result($conn)) {
+                    mysqli_free_result($res);
+                }
+            } while (mysqli_more_results($conn) && mysqli_next_result($conn));
         }
     }
 }
