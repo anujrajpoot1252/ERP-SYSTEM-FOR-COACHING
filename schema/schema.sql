@@ -1,6 +1,7 @@
 -- Clean ERP System Schema
 
 DROP TABLE IF EXISTS `attendance`;
+DROP TABLE IF EXISTS `fees`;
 DROP TABLE IF EXISTS `student`;
 DROP TABLE IF EXISTS `batch`;
 DROP TABLE IF EXISTS `teacher`;
@@ -132,4 +133,14 @@ CREATE TABLE `attendance` (
   `marking` VARCHAR(20) NULL,
   FOREIGN KEY (`student_id`) REFERENCES `student`(`id`) ON DELETE CASCADE,
   FOREIGN KEY (`batch_id`) REFERENCES `batch`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 8. Fee Payment Table
+CREATE TABLE `fees` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `student_id` INT NOT NULL,
+  `amount` DECIMAL(10,2) NOT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  INDEX `idx_fees_student_id` (`student_id`),
+  FOREIGN KEY (`student_id`) REFERENCES `student`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

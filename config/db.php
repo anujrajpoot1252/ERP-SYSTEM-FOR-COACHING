@@ -44,6 +44,19 @@ if (mysqli_num_rows($table_check) == 0) {
     }
 }
 
+// Add the fee table for databases initialized before fee tracking was introduced.
+$fees_table_check = mysqli_query($conn, "SHOW TABLES LIKE 'fees'");
+if ($fees_table_check && mysqli_num_rows($fees_table_check) == 0) {
+    mysqli_query($conn, "CREATE TABLE IF NOT EXISTS `fees` (
+        `id` INT AUTO_INCREMENT PRIMARY KEY,
+        `student_id` INT NOT NULL,
+        `amount` DECIMAL(10,2) NOT NULL,
+        `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        INDEX `idx_fees_student_id` (`student_id`),
+        FOREIGN KEY (`student_id`) REFERENCES `student`(`id`) ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+}
+
 // Helper sanitize function
 function sanitize($conn, $data) {
     return mysqli_real_escape_string($conn, trim($data));
