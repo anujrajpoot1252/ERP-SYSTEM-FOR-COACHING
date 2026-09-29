@@ -19,7 +19,7 @@ $batches = mysqli_query($conn, "SELECT b.*, c.course_name FROM batch b LEFT JOIN
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teacher Portal - Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <link rel="stylesheet" href="/ERP/assets/css/style.css">
+    <link rel="stylesheet" href="/ERP/assets/css/style.css?v=2">
 </head>
 <body>
 <div class="app-container">
@@ -29,9 +29,12 @@ $batches = mysqli_query($conn, "SELECT b.*, c.course_name FROM batch b LEFT JOIN
             <span>Teacher Portal</span>
         </div>
         <ul class="sidebar-menu">
-            <li class="active">
-                <a href="#"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
-            </li>
+        <li class="active">
+            <a href="dashboard.php"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+        </li>
+        <li>
+            <a href="attendance.php"><i class="fa-solid fa-clipboard-user"></i> Attendance</a>
+        </li>
         </ul>
         <div class="sidebar-footer">
             <a href="/ERP/logout.php"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
