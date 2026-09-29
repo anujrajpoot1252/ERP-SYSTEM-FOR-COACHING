@@ -5,7 +5,7 @@ include("../../config/db.php");
 $name = $_POST['name'] ?? '';
 $email = $_POST['email'] ?? '';
 $password = $_POST['password'] ?? '';
-$role = $_POST['role'] ?? 'student';
+$role = 'student';
 
 if ($name == '' || $email == '' || $password == '') {
     echo json_encode([
