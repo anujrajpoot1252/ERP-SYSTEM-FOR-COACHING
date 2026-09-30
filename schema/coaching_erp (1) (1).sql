@@ -103,3 +103,28 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`)
 )
 
+ --table structure for table 'exam'--
+
+ CREATE TABLE `exams` (
+  `exam_id` int(11) NOT NULL AUTO_INCREMENT,
+  `institute_id` varchar(255) NOT NULL,
+  `batch_id` varchar(255) NOT NULL,
+  `exam_name` varchar(100) NOT NULL,
+  `exam_date` date NOT NULL,
+  `total_marks` int(11) NOT NULL,
+  `created_date` datetime NOT NULL DEFAULT current_timestamp()
+  PRIMARY KEY (`exam_id`)
+)
+
+--table structure for table 'result'--
+
+CREATE TABLE `result` (
+  `exam_id` int(11) NOT NULL AUTO_INCREMENT,
+  `student_id` int(11) NOT NULL,
+  `marks_obtained` int(11) NOT NULL,
+  `grade` varchar(255) NOT NULL,
+  `remarks` varchar(255) NOT NULL,
+  `created_at` date NOT NULL DEFAULT current_timestamp()
+ PRIMARY KEY (`exam_id`, `student_id`)
+) 
+
