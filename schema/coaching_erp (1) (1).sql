@@ -127,4 +127,23 @@ CREATE TABLE `result` (
   `created_at` date NOT NULL DEFAULT current_timestamp()
  PRIMARY KEY (`exam_id`, `student_id`)
 ) 
+CREATE TABLE fees (
+    student_id INT NOT NULL,
+    institute_id INT NOT NULL,
+    amount int(10) NOT NULL,
+    due_date DATE NOT NULL,
+    paid_amount DECIMAL(10,2) DEFAULT 0.00,
+    status ENUM('pending', 'partial', 'paid') DEFAULT 'pending',
+    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE payments (
+    fee_id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT NOT NULL,
+    amount int(10) NOT NULL,
+    razorpay_payment_id VARCHAR(100),
+    payment_method ENUM('online', 'cash') NOT NULL,
+    payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status ENUM('pending', 'success', 'failed') DEFAULT 'pending'   
+);
 
