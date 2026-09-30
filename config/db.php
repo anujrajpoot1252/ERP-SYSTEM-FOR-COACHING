@@ -57,6 +57,30 @@ if ($fees_table_check && mysqli_num_rows($fees_table_check) == 0) {
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 }
 
+// Ensure attendance table and status enum are compatible with the application.
+$attendance_table_check = mysqli_query($conn, "SHOW TABLES LIKE 'attendance'");
+if ($attendance_table_check && mysqli_num_rows($attendance_table_check) == 0) {
+    mysqli_query($conn, "CREATE TABLE IF NOT EXISTS `attendance` (
+        `id` INT AUTO_INCREMENT PRIMARY KEY,
+        `student_id` INT NOT NULL,
+        `batch_id` INT NOT NULL,
+        `date` DATE NOT NULL,
+        `status` ENUM('present','absent') NOT NULL,
+        `phone_number_parents` VARCHAR(50) NULL,
+        `marking` VARCHAR(20) NULL,
+        FOREIGN KEY (`student_id`) REFERENCES `student`(`id`) ON DELETE CASCADE,
+        FOREIGN KEY (`batch_id`) REFERENCES `batch`(`id`) ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+} else {
+    $attendance_status_check = mysqli_query($conn, "SHOW COLUMNS FROM `attendance` LIKE 'status'");
+    if ($attendance_status_check && mysqli_num_rows($attendance_status_check) > 0) {
+        $status_field = mysqli_fetch_assoc($attendance_status_check);
+        if (stripos($status_field['Type'], 'presence') !== false || stripos($status_field['Type'], 'absence') !== false) {
+            mysqli_query($conn, "ALTER TABLE `attendance` MODIFY `status` ENUM('present','absent') NOT NULL");
+        }
+    }
+}
+
 // Helper sanitize function
 function sanitize($conn, $data) {
     return mysqli_real_escape_string($conn, trim($data));

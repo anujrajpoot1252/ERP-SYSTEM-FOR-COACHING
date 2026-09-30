@@ -35,10 +35,22 @@ if (!$result) {
     exit;
 }
 
+$legacy_status_map = [
+    'presence' => 'present',
+    'absence' => 'absent'
+];
+
 $data = [];
 while ($row = mysqli_fetch_assoc($result)) {
+    if (isset($row['status']) && isset($legacy_status_map[$row['status']])) {
+        $row['status'] = $legacy_status_map[$row['status']];
+    }
+
     $data[] = $row;
 }
 
-echo json_encode($data);
+echo json_encode([
+    "status" => true,
+    "data" => $data
+]);
 ?>

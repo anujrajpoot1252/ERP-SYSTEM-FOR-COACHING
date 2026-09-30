@@ -5,17 +5,26 @@ include("../../config/db.php");
 $student_id = filter_input(INPUT_POST, 'student_id', FILTER_VALIDATE_INT);
 $batch_id = filter_input(INPUT_POST, 'batch_id', FILTER_VALIDATE_INT);
 $date = trim($_POST['date'] ?? '');
-$status = trim($_POST['status'] ?? '');
+$status = strtolower(trim($_POST['status'] ?? ''));
 $phone_number_parents = trim($_POST['phone_number_parents'] ?? '');
 $marking = trim($_POST['marking'] ?? '');
 
+$legacy_status_map = [
+    'presence' => 'present',
+    'absence' => 'absent'
+];
+
 if (!$student_id || $student_id < 1 || !$batch_id || $batch_id < 1 ||
-	$date === '' || $status === '') {
-	echo json_encode([
-		"status" => false,
-		"message" => "student_id, batch_id, date, and status are required"
-	]);
-	exit;
+    $date === '' || $status === '') {
+    echo json_encode([
+        "status" => false,
+        "message" => "student_id, batch_id, date, and status are required"
+    ]);
+    exit;
+}
+
+if (isset($legacy_status_map[$status])) {
+    $status = $legacy_status_map[$status];
 }
 
 $date_parts = explode('-', $date);
@@ -29,11 +38,11 @@ if (count($date_parts) !== 3 || !checkdate((int) $date_parts[1], (int) $date_par
 }
 
 if (!in_array($status, ['present', 'absent'], true)) {
-	echo json_encode([
-		"status" => false,
-		"message" => "status must be either present or absent"
-	]);
-	exit;
+    echo json_encode([
+        "status" => false,
+        "message" => "status must be either present, absent, presence, or absence"
+    ]);
+    exit;
 }
 
 if (strlen($phone_number_parents) > 50 || strlen($marking) > 20) {
