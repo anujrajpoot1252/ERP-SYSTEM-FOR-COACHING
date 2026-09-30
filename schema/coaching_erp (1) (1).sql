@@ -103,7 +103,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`)
 )
 
- --table structure for table 'exam'--
+ --table structure for table 'exam'
 
  CREATE TABLE `exams` (
   `exam_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -116,7 +116,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`exam_id`)
 )
 
---table structure for table 'result'--
+--table structure for table 'result'
 
 CREATE TABLE `result` (
   `exam_id` int(11) NOT NULL AUTO_INCREMENT,
