@@ -8,13 +8,13 @@ if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) {
     switch ($_SESSION['role']) {
         case 'admin':
         case 'superadmin':
-            header("Location: /ERP/admin/dashboard.php");
+            header("Location: /ERP-SYSTEM-FOR-COACHING/admin/dashboard.php");
             exit;
         case 'teacher':
-            header("Location: /ERP/teacher/dashboard.php");
+            header("Location: /ERP-SYSTEM-FOR-COACHING/teacher/dashboard.php");
             exit;
         case 'student':
-            header("Location: /ERP/student/dashboard.php");
+            header("Location: /ERP-SYSTEM-FOR-COACHING/student/dashboard.php");
             exit;
     }
 }
@@ -45,11 +45,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                 // Redirect based on role
                 if ($user['role'] === 'admin' || $user['role'] === 'superadmin') {
-                    header("Location: /ERP/admin/dashboard.php");
+                    header("Location: /ERP-SYSTEM-FOR-COACHING/admin/dashboard.php");
                 } elseif ($user['role'] === 'teacher') {
-                    header("Location: /ERP/teacher/dashboard.php");
+                    header("Location: /ERP-SYSTEM-FOR-COACHING/teacher/dashboard.php");
                 } elseif ($user['role'] === 'student') {
-                    header("Location: /ERP/student/dashboard.php");
+                    header("Location: /ERP-SYSTEM-FOR-COACHING/student/dashboard.php");
                 }
                 exit;
             } else {

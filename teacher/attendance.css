@@ -1,0 +1,500 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f8fafc;
+    color: #1e293b;
+}
+
+.app-container {
+    min-height: 100vh;
+    display: flex;
+}
+
+.sidebar {
+    width: 240px;
+    min-height: 100vh;
+    background: #fff;
+    border-right: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    inset: 0 auto 0 0;
+}
+
+.sidebar-header {
+    height: 70px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 22px;
+    font-size: 17px;
+    font-weight: 700;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.sidebar-header i {
+    font-size: 20px;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 18px 12px;
+}
+
+.sidebar-menu li {
+    margin-bottom: 5px;
+}
+
+.sidebar-menu a,
+.sidebar-footer a {
+    text-decoration: none;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.sidebar-menu a:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+
+.sidebar-menu li.active a {
+    background: #eff6ff;
+    color: #2563eb;
+    font-weight: 600;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    padding: 15px 12px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.sidebar-footer a:hover {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.main-content {
+    margin-left: 240px;
+    width: calc(100% - 240px);
+    min-height: 100vh;
+}
+
+.top-navbar {
+    min-height: 76px;
+    background: #fff;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 30px;
+}
+
+.page-heading h2 {
+    font-size: 20px;
+    margin-bottom: 4px;
+}
+
+.page-heading p {
+    font-size: 12px;
+    color: #64748b;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-icon {
+    color: #64748b;
+    font-size: 27px;
+}
+
+.role-badge {
+    font-size: 10px;
+    font-weight: 700;
+    background: #eff6ff;
+    color: #2563eb;
+    padding: 5px 8px;
+    border-radius: 5px;
+}
+
+.page-body {
+    padding: 28px;
+    max-width: 1400px;
+    margin: auto;
+}
+
+.card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    margin-bottom: 22px;
+    overflow: hidden;
+}
+
+.card-title {
+    font-size: 15px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.filter-card {
+    padding: 22px;
+}
+
+.filter-card .card-title {
+    margin-bottom: 20px;
+}
+
+.filter-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 18px;
+    align-items: end;
+}
+
+.filter-item {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.filter-item label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #475569;
+}
+
+.form-control-simple {
+    width: 100%;
+    height: 42px;
+    padding: 0 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    background: #fff;
+    color: #1e293b;
+    outline: none;
+}
+
+.form-control-simple:focus {
+    border-color: #2563eb;
+}
+
+.btn-primary {
+    min-height: 42px;
+    padding: 0 18px;
+    border: none;
+    border-radius: 7px;
+    background: #2563eb;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-primary:hover {
+    background: #1d4ed8;
+}
+
+.attendance-header {
+    min-height: 65px;
+    padding: 0 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.attendance-summary {
+    display: flex;
+    gap: 18px;
+    font-size: 12px;
+}
+
+.summary-present {
+    color: #15803d;
+}
+
+.summary-absent {
+    color: #dc2626;
+}
+
+.student-list {
+    width: 100%;
+}
+
+.student-row {
+    min-height: 72px;
+    display: grid;
+    grid-template-columns: 15% 35% 50%;
+    align-items: center;
+    padding: 12px 22px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.student-row:hover {
+    background: #f8fafc;
+}
+
+.student-roll strong {
+    font-size: 13px;
+}
+
+.student-info strong {
+    font-size: 14px;
+}
+
+.mobile-label {
+    display: none;
+}
+
+.status-options {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.status-label {
+    cursor: pointer;
+}
+
+.status-label input {
+    display: none;
+}
+
+.status-label span {
+    min-width: 105px;
+    height: 38px;
+    padding: 0 13px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border: 1px solid #e2e8f0;
+    font-size: 12px;
+    font-weight: 600;
+    transition: 0.15s;
+}
+
+.status-label.present span {
+    color: #15803d;
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+}
+
+.status-label.present input:checked+span {
+    background: #16a34a;
+    border-color: #16a34a;
+    color: #fff;
+}
+
+.status-label.absent span {
+    color: #dc2626;
+    background: #fef2f2;
+    border-color: #fecaca;
+}
+
+.status-label.absent input:checked+span {
+    background: #dc2626;
+    border-color: #dc2626;
+    color: #fff;
+}
+
+.table-footer-actions {
+    padding: 18px 22px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.save-btn {
+    min-width: 170px;
+}
+
+@media (max-width: 900px) {
+
+    .sidebar {
+        width: 70px;
+    }
+
+    .sidebar-header {
+        justify-content: center;
+        padding: 0;
+    }
+
+    .sidebar-header span,
+    .sidebar-menu span,
+    .sidebar-footer span {
+        display: none;
+    }
+
+    .sidebar-menu a,
+    .sidebar-footer a {
+        justify-content: center;
+    }
+
+    .main-content {
+        margin-left: 70px;
+        width: calc(100% - 70px);
+    }
+
+    .filter-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .filter-button {
+        grid-column: 1 / -1;
+    }
+
+    .filter-button button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .sidebar {
+        display: none;
+    }
+
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .top-navbar {
+        padding: 14px 16px;
+    }
+
+    .page-heading h2 {
+        font-size: 17px;
+    }
+
+    .page-heading p {
+        font-size: 11px;
+    }
+
+    .user-profile strong {
+        display: none;
+    }
+
+    .page-body {
+        padding: 14px;
+    }
+
+    .filter-card {
+        padding: 16px;
+    }
+
+    .filter-grid {
+        grid-template-columns: 1fr;
+        gap: 13px;
+    }
+
+    .filter-button {
+        grid-column: auto;
+    }
+
+    .attendance-header {
+        padding: 15px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .attendance-summary {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .student-list {
+        padding: 8px;
+        background: #f8fafc;
+    }
+
+    .student-row {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 13px;
+        margin: 8px 0;
+        padding: 16px;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+    }
+
+    .student-row:hover {
+        background: #fff;
+    }
+
+    .mobile-label {
+        display: block;
+        font-size: 10px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+        color: #94a3b8;
+        margin-bottom: 4px;
+    }
+
+    .student-roll,
+    .student-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .status-options {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .status-label span {
+        width: 100%;
+        min-width: 0;
+        height: 42px;
+    }
+
+    .table-footer-actions {
+        padding: 14px;
+    }
+
+    .save-btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 360px) {
+
+    .page-body {
+        padding: 10px;
+    }
+
+    .user-icon {
+        font-size: 23px;
+    }
+
+    .attendance-summary {
+        font-size: 11px;
+    }
+}
