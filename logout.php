@@ -14,6 +14,6 @@ if (ini_get("session.use_cookies")) {
 }
 
 session_destroy();
-header("Location: /ERP/login.php");
+header("Location: /ERP-SYSTEM-FOR-COACHING/login.php");
 exit;
 ?>
