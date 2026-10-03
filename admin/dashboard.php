@@ -65,7 +65,7 @@ render_admin_header("Dashboard Overview", "dashboard");
 <div class="card">
     <div class="card-title">
         <span><i class="fa-solid fa-clock-rotate-left"></i> Recently Admitted Students</span>
-        <a href="/ERP/admin/students.php" class="btn-primary" style="padding: 6px 14px; text-decoration: none; font-size: 13px; width: auto;">View All</a>
+        <a href="/ERP-SYSTEM-FOR-COACHING/admin/students.php" class="btn-primary" style="padding: 6px 14px; text-decoration: none; font-size: 13px; width: auto;">View All</a>
     </div>
 
     <table class="data-table">

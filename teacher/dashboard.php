@@ -142,7 +142,7 @@ $joiningDate = $teacher['joining_date'] ?? 'N/A';
             </li>
             <li>
                 <a href="fees.php">
-                    <i class="fa-solid fa-clipboard-user"></i>
+                        <i class="fa-solid fa-money-bill"></i>
                     <span>Fees</span>
                 </a>
             </li>
