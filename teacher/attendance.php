@@ -34,6 +34,12 @@
                         <span>Fees</span>
                     </a>
                 </li>
+                <li>
+                <a href="exams.php">
+                        <i class="fas fa-file-alt"></i>
+                    <span>Exams</span>
+                </a>
+            </li>
             </ul>
             <div class="sidebar-footer">
                 <a href="/ERP-SYSTEM-FOR-COACHING/logout.php">
