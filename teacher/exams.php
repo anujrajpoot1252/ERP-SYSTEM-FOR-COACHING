@@ -1,3 +1,133 @@
+<?php
+
+require_once __DIR__ . "/../config/db.php";
+require_once __DIR__ . "/../includes/auth_check.php";
+
+$instituteId = $_SESSION['institute_id'] ?? 1;
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+    $examId = $_POST['exam_id']
+           ?? $_POST['id']
+           ?? '';
+
+    $batchId = $_POST['batch_name']
+            ?? $_POST['batch']
+            ?? $_POST['batchId']
+            ?? '';
+
+    $examName = $_POST['exam_name']
+             ?? $_POST['exam']
+             ?? $_POST['name']
+             ?? '';
+
+    $examDate = $_POST['exam_date']
+             ?? $_POST['date']
+             ?? '';
+
+    $totalMarks = $_POST['total_marks']
+                ?? $_POST['marks']
+                ?? '';
+
+    // Remove extra spaces
+    $examId = trim($examId);
+    $batchId = trim($batchId);
+    $examName = trim($examName);
+    $examDate = trim($examDate);
+    $totalMarks = trim($totalMarks);
+
+
+    // ADD EXAM
+  
+
+    if ($examId === '') {
+
+        $sql = "INSERT INTO exams
+                (institute_id, batch_name, exam_name, exam_date, total_marks, created_date)
+                VALUES (?, ?, ?, ?, ?, NOW())";
+
+        $stmt = $conn->prepare($sql);
+
+        if (!$stmt) {
+            die("Prepare Error: " . $conn->error);
+        }
+
+        $batchId = $batchId;
+        $totalMarks = (int)$totalMarks;
+
+        $stmt->bind_param(
+            "isssi",
+            $instituteId,
+            $batchId,
+            $examName,
+            $examDate,
+            $totalMarks
+        );
+
+        if (!$stmt->execute()) {
+            die("Insert Error: " . $stmt->error);
+        }
+
+        $stmt->close();
+
+        header("Location: exams.php");
+        exit;
+    }
+
+}
+
+  // DELETE EXAM
+
+
+if (isset($_GET['delete'])) {
+
+    $examId = (int)$_GET['delete'];
+
+    $stmt = $conn->prepare("
+        DELETE FROM exams
+        WHERE exam_id = ?
+        AND institute_id = ?
+    ");
+
+    $stmt->bind_param(
+        "ii",
+        $examId,
+        $instituteId
+    );
+
+    if (!$stmt->execute()) {
+        die("Delete Error: " . $stmt->error);
+    }
+
+    $stmt->close();
+
+    header("Location: exams.php");
+    exit;
+}
+
+
+// FETCH EXAMS
+
+
+$stmt = $conn->prepare("
+    SELECT
+        exam_id,
+        batch_name,
+        exam_name,
+        exam_date,
+        total_marks,
+        created_date
+    FROM exams
+    WHERE institute_id = ?
+    ORDER BY exam_date ASC
+");
+
+$stmt->bind_param("i", $instituteId);
+$stmt->execute();
+$result = $stmt->get_result();
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -56,27 +186,27 @@
                     <div class="card-header">
                         <h3 id="form-title">Create New Exam</h3>
                     </div>
-                    <form id="examForm">
+                    <form id="examForm" method="POST" action="exams.php">
                         <input type="hidden" id="examId" value="">
 
                         <div class="form-group">
                             <label for="examName">Exam Name</label>
-                            <input type="text" id="examName" placeholder="e.g. Unit Test 1 - Physics" required>
+                            <input type="text" id="examName" name="exam_name" placeholder="e.g. Unit Test 1 - Physics" required>
                         </div>
 
                         <div class="form-group">
                             <label for="examDate">Exam Date</label>
-                            <input type="date" id="examDate" required>
+                            <input type="date" id="examDate" name="exam_date" required>
                         </div>
 
                         <div class="form-group">
                             <label for="totalMarks">Total Marks</label>
-                            <input type="number" id="totalMarks" placeholder="e.g. 100" min="1" required>
+                            <input type="number" id="totalMarks" name="total_marks" placeholder="e.g. 100" min="1" required>
                         </div>
 
                         <div class="form-group">
                             <label for="batchSelect">Batch</label>
-                            <select id="batchSelect" required>
+                            <select id="batchSelect" name="batch_name" required>
                                 <option value="" disabled selected>Select Batch</option>
                                 <option value="Batch A (Morning)">Batch A (Morning)</option>
                                 <option value="Batch B (Evening)">Batch B (Evening)</option>
@@ -113,6 +243,39 @@
                                 </tr>
                             </thead>
                             <tbody id="examTableBody">
+                                <tbody>
+
+<tbody>
+
+<tbody>
+
+                   <?php while ($row = $result->fetch_assoc()) { ?>
+
+               <tr>
+                      <td><?= htmlspecialchars($row['exam_id']) ?></td>
+                      <td><?= htmlspecialchars($row['exam_name']) ?></td>
+                      <td><?= htmlspecialchars($row['batch_name']) ?></td>
+                      <td><?= htmlspecialchars($row['exam_date']) ?></td>
+                      <td><?= htmlspecialchars($row['total_marks']) ?></td>
+                      <td class="actions-cell">
+                      <a href="exams.php?edit=<?= $row['exam_id'] ?>"
+                         onclick="return confirm('Are you sure you want to delete this exam?')">
+                         Edit</a>
+
+                     <a href="exams.php?delete=<?= $row['exam_id'] ?>"
+                       onclick="return confirm('Are you sure you want to delete this exam?')">
+                         Delete</a>
+                     </td>
+               </tr>
+
+                  <?php } 
+                  ?>
+
+</tbody>
+
+</tbody>
+
+</tbody>
                                 <tr data-id="1">
                                     <td>1</td>
                                     <td><strong>Mathematics Mid-Term</strong></td>
