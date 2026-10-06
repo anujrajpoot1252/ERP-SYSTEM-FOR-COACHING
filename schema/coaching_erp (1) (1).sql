@@ -16,7 +16,7 @@ CREATE TABLE `batch` (
   `id` int(11) AUTO_INCREMENT NOT NULL,
   `course_id` int(11) DEFAULT NULL,
   `institute_id` int(11) DEFAULT NULL,
-  `name` text DEFAULT NULL,
+  `batch_name` text DEFAULT NULL,
   `teacher_id` int(11) DEFAULT NULL,
   `start_date` date DEFAULT NULL,
   `ending_date` date DEFAULT NULL,
@@ -108,7 +108,7 @@ CREATE TABLE `users` (
  CREATE TABLE `exams` (
   `exam_id` int(11) NOT NULL AUTO_INCREMENT,
   `institute_id` varchar(255) NOT NULL,
-  `batch_id` varchar(255) NOT NULL,
+  `batch_name` varchar(255) NOT NULL,
   `exam_name` varchar(100) NOT NULL,
   `exam_date` date NOT NULL,
   `total_marks` int(11) NOT NULL,
