@@ -33,7 +33,10 @@ $student = mysqli_fetch_assoc(mysqli_query($conn, "
         </div>
         <ul class="sidebar-menu">
             <li class="active">
-                <a href="#"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+                <a href="#"><i class="fa-solid fa-chart-line"></i>Dashboard</a>
+            </li>
+            <li>
+                <a href="result.php"><i class="fa-solid fa-poll"></i>Result</a>
             </li>
         </ul>
         <div class="sidebar-footer">
