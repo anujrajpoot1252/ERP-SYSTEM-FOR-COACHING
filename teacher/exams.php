@@ -40,6 +40,12 @@
                         <span>Exams</span>
                     </a>
                 </li>
+                <li>
+                    <a href="result.php">
+                        <i class="fas fa-poll"></i>
+                        <span>Result</span>
+                    </a>
+                </li>
             </ul>
             <div class="sidebar-footer">
                 <a href="/ERP-SYSTEM-FOR-COACHING/logout.php">
