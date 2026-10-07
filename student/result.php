@@ -73,6 +73,7 @@
                                     <th>PERCENTAGE</th>
                                     <th class="text-center">GRADE</th>
                                     <th class="text-center">STATUS</th>
+                                    <th class="text-center">ACTION</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -84,6 +85,11 @@
                                     <td>88%</td>
                                     <td class="text-center"><span class="badge badge-grade-a">A</span></td>
                                     <td class="text-center"><span class="status-pill status-pass">Pass</span></td>
+                                    <td class="text-center">
+                                        <a href="" class="btn-download" title="Download Marksheet">
+                                            <i class="fa-solid fa-download"></i> Marksheet
+                                        </a>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>2</td>
@@ -93,6 +99,11 @@
                                     <td>96%</td>
                                     <td class="text-center"><span class="badge badge-grade-aplus">A+</span></td>
                                     <td class="text-center"><span class="status-pill status-pass">Pass</span></td>
+                                    <td class="text-center">
+                                        <a href="" class="btn-download" title="Download Marksheet">
+                                            <i class="fa-solid fa-download"></i> Marksheet
+                                        </a>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>3</td>
@@ -102,6 +113,11 @@
                                     <td>76%</td>
                                     <td class="text-center"><span class="badge badge-grade-b">B</span></td>
                                     <td class="text-center"><span class="status-pill status-pass">Pass</span></td>
+                                    <td class="text-center">
+                                        <a href="" class="btn-download" title="Download Marksheet">
+                                            <i class="fa-solid fa-download"></i> Marksheet
+                                        </a>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
