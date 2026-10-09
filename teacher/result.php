@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 <?php
 require_once __DIR__ . "/../config/db.php";
 require_once __DIR__ . "/../includes/auth_check.php";
@@ -78,7 +76,6 @@ $results_list = mysqli_query($conn, "
     ORDER BY r.id DESC
 ");
 ?>
->>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -141,17 +138,6 @@ $results_list = mysqli_query($conn, "
             <div class="workspace">
                 <section class="card form-card">
                     <h3 class="card-title">Enter Student Marks</h3>
-<<<<<<< HEAD
-                    
-                    <form action="#" method="POST">
-                        <div class="form-group">
-                            <label for="selectExam">Select Exam</label>
-                            <select id="selectExam" name="exam_id" required>
-                                <option value="" disabled selected>Select Exam</option>
-                                <option value="1">Mathematics Mid-Term (Batch A)</option>
-                                <option value="2">Physics Weekly Quiz (Batch B)</option>
-                                <option value="3">Chemistry Organic Test (Crash Course)</option>
-=======
 
                     <?php if (!empty($message)): ?>
                         <div style="background: #dcfce7; color: #15803d; padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 14px;">
@@ -175,15 +161,10 @@ $results_list = mysqli_query($conn, "
                                         <option value="<?= $e['exam_id'] ?>"><?= htmlspecialchars($e['exam_name']) ?> (<?= htmlspecialchars($e['batch_name']) ?>)</option>
                                     <?php endwhile; ?>
                                 <?php endif; ?>
->>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
                             </select>
                         </div>
 
                         <div class="form-group">
-<<<<<<< HEAD
-                            <label for="studentName">Student Name / Roll No</label>
-                            <input type="text" id="studentName" name="student_name" placeholder="e.g. Rahul Sharma (Roll 101)" required>
-=======
                             <label for="selectStudent">Select Student *</label>
                             <select id="selectStudent" name="student_id" required>
                                 <option value="" disabled selected>-- Select Student --</option>
@@ -193,26 +174,16 @@ $results_list = mysqli_query($conn, "
                                     <?php endwhile; ?>
                                 <?php endif; ?>
                             </select>
->>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
                         </div>
 
                         <div class="form-row">
                             <div class="form-group flex-1">
-<<<<<<< HEAD
-                                <label for="obtainedMarks">Marks Obtained</label>
-                                <input type="number" id="obtainedMarks" name="obtained_marks" placeholder="e.g. 85" min="0" required>
-                            </div>
-                            <div class="form-group flex-1">
-                                <label for="totalMarks">Total Marks</label>
-                                <input type="number" id="totalMarks" name="total_marks" placeholder="e.g. 100" min="1" required>
-=======
                                 <label for="obtainedMarks">Marks Obtained *</label>
                                 <input type="number" id="obtainedMarks" name="obtained_marks" placeholder="e.g. 85" min="0" step="0.5" required>
                             </div>
                             <div class="form-group flex-1">
                                 <label for="totalMarks">Total Marks *</label>
                                 <input type="number" id="totalMarks" name="total_marks" placeholder="e.g. 100" min="1" step="0.5" required value="100">
->>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
                             </div>
                         </div>
 
@@ -239,12 +210,6 @@ $results_list = mysqli_query($conn, "
                 <section class="card list-card">
                     <div class="list-header">
                         <h3 class="card-title">Result List</h3>
-<<<<<<< HEAD
-                        <div class="search-wrap">
-                            <input type="text" placeholder="Search results..." class="search-input">
-                        </div>
-=======
->>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
                     </div>
 
                     <div class="table-container">
@@ -260,30 +225,6 @@ $results_list = mysqli_query($conn, "
                                 </tr>
                             </thead>
                             <tbody>
-<<<<<<< HEAD
-                                <tr>
-                                    <td>1</td>
-                                    <td><strong>studentName</strong><br><small class="text-muted">Roll no.: </small></td>
-                                    <td>Name of exam</td>
-                                    <td><span class="marks-display"><strong>obtained_marks</strong> / total_marks</span></td>
-                                    <td><span class="badge">grade</span></td>
-                                    <td class="text-center">
-                                        <button type="button" class="btn-action edit-btn">Edit</button>
-                                        <button type="button" class="btn-action delete-btn">Delete</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td><strong>Rahul Sharma</strong><br><small class="text-muted">Roll: 101</small></td>
-                                    <td>Mathematics Mid-Term</td>
-                                    <td><span class="marks-display"><strong>88</strong> / 100</span></td>
-                                    <td><span class="badge badge-grade-a">A</span></td>
-                                    <td class="text-center">
-                                        <button type="button" class="btn-action edit-btn">Edit</button>
-                                        <button type="button" class="btn-action delete-btn">Delete</button>
-                                    </td>
-                                </tr>
-=======
                                 <?php if ($results_list && mysqli_num_rows($results_list) > 0): ?>
                                     <?php $idx = 1; while ($r = mysqli_fetch_assoc($results_list)): ?>
                                         <tr>
@@ -302,7 +243,6 @@ $results_list = mysqli_query($conn, "
                                         <td colspan="6" style="text-align:center; color:#94a3b8; padding: 20px;">No results recorded yet.</td>
                                     </tr>
                                 <?php endif; ?>
->>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
                             </tbody>
                         </table>
                     </div>

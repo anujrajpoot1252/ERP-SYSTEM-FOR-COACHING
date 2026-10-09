@@ -51,19 +51,14 @@ if ($fees_table_check && mysqli_num_rows($fees_table_check) == 0) {
         `id` INT AUTO_INCREMENT PRIMARY KEY,
         `student_id` INT NOT NULL,
         `amount` DECIMAL(10,2) NOT NULL,
-<<<<<<< HEAD
-=======
         `cashback` DECIMAL(10,2) DEFAULT 0.00,
         `payment_mode` VARCHAR(50) DEFAULT 'Cash',
         `ref_no` VARCHAR(100) NULL,
         `remarks` VARCHAR(255) NULL,
->>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
         `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         INDEX `idx_fees_student_id` (`student_id`),
         FOREIGN KEY (`student_id`) REFERENCES `student`(`id`) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
-<<<<<<< HEAD
-=======
 } else {
     $cashback_col_check = mysqli_query($conn, "SHOW COLUMNS FROM `fees` LIKE 'cashback'");
     if ($cashback_col_check && mysqli_num_rows($cashback_col_check) == 0) {
@@ -72,7 +67,6 @@ if ($fees_table_check && mysqli_num_rows($fees_table_check) == 0) {
         @mysqli_query($conn, "ALTER TABLE `fees` ADD COLUMN `ref_no` VARCHAR(100) NULL AFTER `payment_mode`");
         @mysqli_query($conn, "ALTER TABLE `fees` ADD COLUMN `remarks` VARCHAR(255) NULL AFTER `ref_no`");
     }
->>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
 }
 
 // Ensure attendance table and status enum are compatible with the application.
@@ -99,8 +93,6 @@ if ($attendance_table_check && mysqli_num_rows($attendance_table_check) == 0) {
     }
 }
 
-<<<<<<< HEAD
-=======
 // Ensure exams table exists
 $exams_table_check = mysqli_query($conn, "SHOW TABLES LIKE 'exams'");
 if ($exams_table_check && mysqli_num_rows($exams_table_check) == 0) {
@@ -139,7 +131,6 @@ if ($attendance_unique_check && mysqli_num_rows($attendance_unique_check) == 0) 
     @mysqli_query($conn, "ALTER TABLE `attendance` ADD UNIQUE KEY `unique_student_batch_date` (`student_id`, `batch_id`, `date`)");
 }
 
->>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
 // Helper sanitize function
 function sanitize($conn, $data) {
     return mysqli_real_escape_string($conn, trim($data));

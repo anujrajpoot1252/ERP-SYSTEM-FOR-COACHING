@@ -88,11 +88,7 @@ if ($student_id > 0) {
                 <div class="user-profile">
                     <span class="role-badge">STUDENT</span>
                     <i class="fa-solid fa-user-circle fa-xl" style="color: #64748b;"></i>
-<<<<<<< HEAD
-                    <strong>Aman Verma</strong>
-=======
                     <strong><?= htmlspecialchars($student_name) ?></strong>
->>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
                 </div>
             </div>
 
@@ -102,12 +98,6 @@ if ($student_id > 0) {
                 <section class="card list-card">
                     <div class="list-header">
                         <h3 class="card-title">Exam Performance History</h3>
-<<<<<<< HEAD
-                        <div class="search-wrap">
-                            <input type="text" placeholder="Search exams..." class="search-input">
-                        </div>
-=======
->>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
                     </div>
 
                     <div class="table-container">
@@ -121,54 +111,6 @@ if ($student_id > 0) {
                                     <th>PERCENTAGE</th>
                                     <th class="text-center">GRADE</th>
                                     <th class="text-center">STATUS</th>
-<<<<<<< HEAD
-                                    <th class="text-center">ACTION</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td><strong>Mathematics Mid-Term</strong></td>
-                                    <td>15 Oct 2026</td>
-                                    <td><span class="marks-display"><strong>88</strong> / 100</span></td>
-                                    <td>88%</td>
-                                    <td class="text-center"><span class="badge badge-grade-a">A</span></td>
-                                    <td class="text-center"><span class="status-pill status-pass">Pass</span></td>
-                                    <td class="text-center">
-                                        <a href="" class="btn-download" title="Download Marksheet">
-                                            <i class="fa-solid fa-download"></i> Marksheet
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td><strong>Physics Weekly Quiz</strong></td>
-                                    <td>18 Oct 2026</td>
-                                    <td><span class="marks-display"><strong>24</strong> / 25</span></td>
-                                    <td>96%</td>
-                                    <td class="text-center"><span class="badge badge-grade-aplus">A+</span></td>
-                                    <td class="text-center"><span class="status-pill status-pass">Pass</span></td>
-                                    <td class="text-center">
-                                        <a href="" class="btn-download" title="Download Marksheet">
-                                            <i class="fa-solid fa-download"></i> Marksheet
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td><strong>Chemistry Organic Test</strong></td>
-                                    <td>22 Oct 2026</td>
-                                    <td><span class="marks-display"><strong>38</strong> / 50</span></td>
-                                    <td>76%</td>
-                                    <td class="text-center"><span class="badge badge-grade-b">B</span></td>
-                                    <td class="text-center"><span class="status-pill status-pass">Pass</span></td>
-                                    <td class="text-center">
-                                        <a href="" class="btn-download" title="Download Marksheet">
-                                            <i class="fa-solid fa-download"></i> Marksheet
-                                        </a>
-                                    </td>
-                                </tr>
-=======
                                 </tr>
                             </thead>
                             <tbody>
@@ -194,7 +136,6 @@ if ($student_id > 0) {
                                         <td colspan="7" style="text-align: center; color: #94a3b8; padding: 20px;">No examination results published yet.</td>
                                     </tr>
                                 <?php endif; ?>
->>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
                             </tbody>
                         </table>
                     </div>

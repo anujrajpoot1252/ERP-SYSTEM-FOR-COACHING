@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 <?php
 require_once __DIR__ . "/../config/db.php";
 require_once __DIR__ . "/../includes/auth_check.php";
@@ -8,7 +6,6 @@ check_access(['teacher']);
 $batches_res = mysqli_query($conn, "SELECT id, name FROM batch ORDER BY id ASC");
 $selected_batch = intval($_GET['batch_id'] ?? 0);
 ?>
->>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -92,16 +89,11 @@ $selected_batch = intval($_GET['batch_id'] ?? 0);
                             <label for="batch-select">Batch</label>
                             <select id="batch-select" class="form-control-simple">
                                 <option value="">-- Choose Batch --</option>
-<<<<<<< HEAD
-                                <option value="1">JEE Morning Batch A</option>
-                                <option value="2">NEET Evening Batch B</option>
-=======
                                 <?php if ($batches_res): ?>
                                     <?php while ($b = mysqli_fetch_assoc($batches_res)): ?>
                                         <option value="<?= $b['id'] ?>" <?= $selected_batch === intval($b['id']) ? 'selected' : '' ?>><?= htmlspecialchars($b['name']) ?></option>
                                     <?php endwhile; ?>
                                 <?php endif; ?>
->>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
                             </select>
                         </div>
 

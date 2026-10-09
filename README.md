@@ -38,8 +38,6 @@ student/dashboard.php  Student Profile, Admission No, Course aur Class Timing.
 CSS Design:
 
 assets/css/style.css  Nayi design file (Aapki kisi bhi puraani style.css file ko bina touch kiye alag se banayi gayi hai).
-<<<<<<< HEAD
-=======
 
 
 (PROBLME SOLVE )
@@ -80,4 +78,3 @@ Unused Files Deleted: Faltu files/folders (test.html, index.html, styles.css, st
 
 
 
->>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460

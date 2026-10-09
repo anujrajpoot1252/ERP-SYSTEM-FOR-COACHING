@@ -90,11 +90,7 @@ render_admin_header("Teachers Management", "teachers");
 
             <div class="form-group">
                 <label>Password *</label>
-<<<<<<< HEAD
-                <input type="password" name="password" class="form-control-simple" placeholder="Default: teacher123" required value="teacher123">
-=======
                 <input type="password" name="password" class="form-control-simple" placeholder="Enter password" required>
->>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
             </div>
 
             <div class="form-group">

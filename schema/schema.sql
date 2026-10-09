@@ -144,8 +144,6 @@ CREATE TABLE `fees` (
   INDEX `idx_fees_student_id` (`student_id`),
   FOREIGN KEY (`student_id`) REFERENCES `student`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-<<<<<<< HEAD
-=======
 
 -- 9. Exams Table
 CREATE TABLE IF NOT EXISTS `exams` (
@@ -173,4 +171,3 @@ CREATE TABLE IF NOT EXISTS `results` (
   FOREIGN KEY (`student_id`) REFERENCES `student`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
->>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
