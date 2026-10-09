@@ -1,3 +1,39 @@
+<?php
+require_once __DIR__ . "/../config/db.php";
+require_once __DIR__ . "/../includes/auth_check.php";
+
+check_access(['student']);
+
+$user_id = $_SESSION['user_id'];
+
+// Get student record for logged in user
+$student_query = mysqli_query($conn, "SELECT s.id, u.name FROM student s JOIN users u ON s.user_id = u.id WHERE s.user_id = $user_id LIMIT 1");
+$student_data = mysqli_fetch_assoc($student_query);
+$student_id = $student_data['id'] ?? 0;
+$student_name = $student_data['name'] ?? $_SESSION['name'] ?? 'Student';
+
+// Fetch Results for this student
+$results_list = [];
+if ($student_id > 0) {
+    $res_query = mysqli_query($conn, "
+        SELECT 
+            r.obtained_marks,
+            r.total_marks,
+            r.grade,
+            e.exam_name,
+            e.exam_date
+        FROM results r
+        JOIN exams e ON r.exam_id = e.exam_id
+        WHERE r.student_id = $student_id
+        ORDER BY e.exam_date DESC
+    ");
+    if ($res_query) {
+        while ($row = mysqli_fetch_assoc($res_query)) {
+            $results_list[] = $row;
+        }
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -52,7 +88,11 @@
                 <div class="user-profile">
                     <span class="role-badge">STUDENT</span>
                     <i class="fa-solid fa-user-circle fa-xl" style="color: #64748b;"></i>
+<<<<<<< HEAD
                     <strong>Aman Verma</strong>
+=======
+                    <strong><?= htmlspecialchars($student_name) ?></strong>
+>>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
                 </div>
             </div>
 
@@ -62,9 +102,12 @@
                 <section class="card list-card">
                     <div class="list-header">
                         <h3 class="card-title">Exam Performance History</h3>
+<<<<<<< HEAD
                         <div class="search-wrap">
                             <input type="text" placeholder="Search exams..." class="search-input">
                         </div>
+=======
+>>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
                     </div>
 
                     <div class="table-container">
@@ -78,6 +121,7 @@
                                     <th>PERCENTAGE</th>
                                     <th class="text-center">GRADE</th>
                                     <th class="text-center">STATUS</th>
+<<<<<<< HEAD
                                     <th class="text-center">ACTION</th>
                                 </tr>
                             </thead>
@@ -124,6 +168,33 @@
                                         </a>
                                     </td>
                                 </tr>
+=======
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if (count($results_list) > 0): ?>
+                                    <?php $idx = 1; foreach ($results_list as $r): 
+                                        $obtained = floatval($r['obtained_marks']);
+                                        $total = floatval($r['total_marks']);
+                                        $pct = $total > 0 ? round(($obtained / $total) * 100, 1) : 0;
+                                        $is_pass = $pct >= 33;
+                                    ?>
+                                        <tr>
+                                            <td><?= $idx++ ?></td>
+                                            <td><strong><?= htmlspecialchars($r['exam_name']) ?></strong></td>
+                                            <td><?= htmlspecialchars($r['exam_date']) ?></td>
+                                            <td><span class="marks-display"><strong><?= htmlspecialchars($r['obtained_marks']) ?></strong> / <?= htmlspecialchars($r['total_marks']) ?></span></td>
+                                            <td><?= $pct ?>%</td>
+                                            <td class="text-center"><span class="badge badge-grade-a"><?= htmlspecialchars($r['grade'] ?: 'N/A') ?></span></td>
+                                            <td class="text-center"><span class="status-pill status-<?= $is_pass ? 'pass' : 'fail' ?>"><?= $is_pass ? 'Pass' : 'Fail' ?></span></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="7" style="text-align: center; color: #94a3b8; padding: 20px;">No examination results published yet.</td>
+                                    </tr>
+                                <?php endif; ?>
+>>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
                             </tbody>
                         </table>
                     </div>

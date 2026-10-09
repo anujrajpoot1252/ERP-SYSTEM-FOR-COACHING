@@ -147,6 +147,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 status
             )
             VALUES (?, ?, ?, ?)
+<<<<<<< HEAD
+=======
+            ON DUPLICATE KEY UPDATE status = VALUES(status)
+>>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
         ";
 
         $stmt = $conn->prepare($sql);

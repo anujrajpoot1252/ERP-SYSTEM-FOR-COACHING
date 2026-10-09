@@ -1,3 +1,62 @@
+<<<<<<< HEAD
+=======
+<?php
+require_once __DIR__ . "/../config/db.php";
+require_once __DIR__ . "/../includes/auth_check.php";
+
+check_access(['teacher']);
+
+// Fetch Students Fee Details
+$students_query = mysqli_query($conn, "
+    SELECT 
+        s.id as student_id,
+        s.admission_no,
+        u.name as student_name,
+        b.name as batch_name,
+        COALESCE(c.fees, 0) as total_course_fee,
+        COALESCE(SUM(f.amount), 0) as paid_amount
+    FROM student s
+    JOIN users u ON s.user_id = u.id
+    LEFT JOIN course c ON s.course_id = c.id
+    LEFT JOIN batch b ON s.batch_id = b.id
+    LEFT JOIN fees f ON f.student_id = s.id
+    GROUP BY s.id
+    ORDER BY s.id DESC
+");
+
+$students = [];
+$total_students = 0;
+$cleared_count = 0;
+$pending_count = 0;
+
+if ($students_query) {
+    while ($row = mysqli_fetch_assoc($students_query)) {
+        $total_fee = floatval($row['total_course_fee']);
+        $paid = floatval($row['paid_amount']);
+        $due = max(0, $total_fee - $paid);
+        
+        if ($due == 0 && $total_fee > 0) {
+            $status = 'paid';
+            $cleared_count++;
+        } elseif ($paid > 0) {
+            $status = 'partial';
+            $pending_count++;
+        } else {
+            $status = 'pending';
+            $pending_count++;
+        }
+
+        $row['total_fee'] = $total_fee;
+        $row['paid'] = $paid;
+        $row['due'] = $due;
+        $row['status'] = $status;
+
+        $students[] = $row;
+    }
+}
+$total_students = count($students);
+?>
+>>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,12 +92,21 @@
                         <span>Fees</span>
                     </a>
                 </li>
+<<<<<<< HEAD
             <li>
                 <a href="exams.php">
                         <i class="fas fa-file-alt"></i>
                     <span>Exams</span>
                 </a>
             </li>
+=======
+                <li>
+                    <a href="exams.php">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Exams</span>
+                    </a>
+                </li>
+>>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
                 <li>
                     <a href="result.php">
                         <i class="fas fa-poll"></i>
@@ -66,7 +134,11 @@
             </header>
 
             <main class="content-body">
+<<<<<<< HEAD
                 <!-- 3 Standalone Stat Boxes -->
+=======
+                <!-- 3 Dynamic Stat Boxes -->
+>>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-card-top">
@@ -75,7 +147,11 @@
                                 <i class="fa-solid fa-layer-group"></i>
                             </div>
                         </div>
+<<<<<<< HEAD
                         <strong class="stat-num">64</strong>
+=======
+                        <strong class="stat-num"><?= $total_students ?></strong>
+>>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
                     </div>
 
                     <div class="stat-card">
@@ -85,7 +161,11 @@
                                 <i class="fa-solid fa-circle-check"></i>
                             </div>
                         </div>
+<<<<<<< HEAD
                         <strong class="stat-num">48</strong>
+=======
+                        <strong class="stat-num"><?= $cleared_count ?></strong>
+>>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
                     </div>
 
                     <div class="stat-card">
@@ -95,7 +175,11 @@
                                 <i class="fa-solid fa-clock-rotate-left"></i>
                             </div>
                         </div>
+<<<<<<< HEAD
                         <strong class="stat-num">16</strong>
+=======
+                        <strong class="stat-num"><?= $pending_count ?></strong>
+>>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
                     </div>
                 </div>
 
@@ -104,7 +188,11 @@
                     <div class="card-section-header">
                         <div class="header-left">
                             <h3 class="section-title"><i class="fa-solid fa-receipt"></i> Batch Students Fee Status</h3>
+<<<<<<< HEAD
                             <p class="sub-counter">Showing 3 Students</p>
+=======
+                            <p class="sub-counter">Showing <?= $total_students ?> Students</p>
+>>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
                         </div>
                         <a href="payment.php" class="portal-btn">Collect Payment</a>
                     </div>
@@ -124,6 +212,7 @@
                                 </tr>
                             </thead>
                             <tbody>
+<<<<<<< HEAD
                                 <tr>
                                     <td class="font-mono">ADM-2026-001</td>
                                     <td class="font-semibold">Aman Verma</td>
@@ -154,6 +243,34 @@
                                     <td><span class="status-tag status-pending">Pending</span></td>
                                     <td class="td-action"><a href="payment.php?id=ADM-2026-009" class="action-link"><i class="fa-solid fa-credit-card"></i> Collect</a></td>
                                 </tr>
+=======
+                                <?php if (count($students) > 0): ?>
+                                    <?php foreach ($students as $st): ?>
+                                        <tr>
+                                            <td class="font-mono"><strong><?= htmlspecialchars($st['admission_no']) ?></strong></td>
+                                            <td class="font-semibold"><?= htmlspecialchars($st['student_name']) ?></td>
+                                            <td><?= htmlspecialchars($st['batch_name'] ?? 'Unassigned') ?></td>
+                                            <td>₹<?= number_format($st['total_fee'], 2) ?></td>
+                                            <td>₹<?= number_format($st['paid'], 2) ?></td>
+                                            <td>₹<?= number_format($st['due'], 2) ?></td>
+                                            <td>
+                                                <span class="status-tag status-<?= $st['status'] ?>">
+                                                    <?= strtoupper($st['status']) ?>
+                                                </span>
+                                            </td>
+                                            <td class="td-action">
+                                                <a href="payment.php?student_id=<?= $st['student_id'] ?>" class="action-link">
+                                                    <i class="fa-solid fa-credit-card"></i> Collect
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="8" style="text-align:center; color:#94a3b8; padding: 20px;">No student records found.</td>
+                                    </tr>
+                                <?php endif; ?>
+>>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
                             </tbody>
                         </table>
                     </div>

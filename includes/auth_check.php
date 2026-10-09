@@ -6,7 +6,11 @@ if (session_status() === PHP_SESSION_NONE) {
 
 function check_access($allowed_roles = []) {
     if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
+<<<<<<< HEAD
         header("Location: /ERP/login.php");
+=======
+        header("Location: /ERP-SYSTEM-FOR-COACHING/login.php");
+>>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
         exit;
     }
 
@@ -16,6 +20,7 @@ function check_access($allowed_roles = []) {
             switch ($_SESSION['role']) {
                 case 'admin':
                 case 'superadmin':
+<<<<<<< HEAD
                     header("Location: /ERP/admin/dashboard.php");
                     break;
                 case 'teacher':
@@ -26,6 +31,18 @@ function check_access($allowed_roles = []) {
                     break;
                 default:
                     header("Location: /ERP/login.php");
+=======
+                    header("Location: /ERP-SYSTEM-FOR-COACHING/admin/dashboard.php");
+                    break;
+                case 'teacher':
+                    header("Location: /ERP-SYSTEM-FOR-COACHING/teacher/dashboard.php");
+                    break;
+                case 'student':
+                    header("Location: /ERP-SYSTEM-FOR-COACHING/student/dashboard.php");
+                    break;
+                default:
+                    header("Location: /ERP-SYSTEM-FOR-COACHING/login.php");
+>>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
             }
             exit;
         }

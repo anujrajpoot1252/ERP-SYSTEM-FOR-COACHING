@@ -144,3 +144,33 @@ CREATE TABLE `fees` (
   INDEX `idx_fees_student_id` (`student_id`),
   FOREIGN KEY (`student_id`) REFERENCES `student`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+<<<<<<< HEAD
+=======
+
+-- 9. Exams Table
+CREATE TABLE IF NOT EXISTS `exams` (
+  `exam_id` INT AUTO_INCREMENT PRIMARY KEY,
+  `institute_id` INT DEFAULT 1,
+  `batch_name` VARCHAR(100) NOT NULL,
+  `exam_name` VARCHAR(150) NOT NULL,
+  `exam_date` DATE NOT NULL,
+  `total_marks` INT NOT NULL,
+  `created_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (`institute_id`) REFERENCES `institute`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 10. Results Table
+CREATE TABLE IF NOT EXISTS `results` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `institute_id` INT DEFAULT 1,
+  `exam_id` INT NOT NULL,
+  `student_id` INT NOT NULL,
+  `obtained_marks` DECIMAL(5,2) NOT NULL,
+  `total_marks` DECIMAL(5,2) NOT NULL,
+  `grade` VARCHAR(10) NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (`exam_id`) REFERENCES `exams`(`exam_id`) ON DELETE CASCADE,
+  FOREIGN KEY (`student_id`) REFERENCES `student`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+>>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
