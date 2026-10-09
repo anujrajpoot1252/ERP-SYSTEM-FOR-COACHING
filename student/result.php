@@ -29,6 +29,11 @@
                         <span>Results</span>
                     </a>
                 </li>
+            <li>
+                <a href="attendance.php">
+                    <i class="fa-solid fa-calendar-check"></i>
+                <span>Attendance</span>
+            </li>
             </ul>
 
             <div class="sidebar-footer">

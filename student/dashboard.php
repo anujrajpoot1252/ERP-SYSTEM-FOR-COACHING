@@ -38,6 +38,9 @@ $student = mysqli_fetch_assoc(mysqli_query($conn, "
             <li>
                 <a href="result.php"><i class="fa-solid fa-poll"></i>Result</a>
             </li>
+            <li>
+                <a href="attendance.php"><i class="fa-solid fa-calendar-check"></i></i>Attendance</a>
+            </li>
         </ul>
         <div class="sidebar-footer">
             <a href="/ERP-SYSTEM-FOR-COACHING/logout.php"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
