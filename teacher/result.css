@@ -329,3 +329,86 @@ body {
     background-color: #fee2e2;
     color: #b91c1c;
 }
+
+@media (max-width: 768px) {
+    .layout {
+        flex-direction: row;
+    }
+
+    .sidebar {
+        width: 64px;
+        min-width: 64px;
+        position: static;
+    }
+
+    .sidebar-header {
+        justify-content: center;
+        padding: 20px 0;
+    }
+
+    .sidebar-header span,
+    .sidebar-menu li a span,
+    .sidebar-footer a span {
+        display: none;
+    }
+
+    .sidebar-menu {
+        padding: 12px 0;
+    }
+
+    .sidebar-menu li a {
+        justify-content: center;
+        padding: 14px 0;
+    }
+
+    .sidebar-menu li a i {
+        margin: 0;
+        font-size: 18px;
+    }
+
+    .sidebar-menu li.active a {
+        border-left: 3px solid #6366f1;
+    }
+
+    .sidebar-footer {
+        padding: 16px 0;
+        text-align: center;
+    }
+
+    .sidebar-footer a {
+        justify-content: center;
+    }
+
+    .main-content {
+        min-width: 0;
+        width: calc(100vw - 64px);
+        padding: 16px 14px;
+        overflow-x: hidden;
+    }
+
+    .workspace {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .card {
+        padding: 16px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .table-container {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .data-table {
+        min-width: 550px;
+    }
+}

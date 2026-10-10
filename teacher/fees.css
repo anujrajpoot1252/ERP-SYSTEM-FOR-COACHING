@@ -530,22 +530,106 @@ body {
 
 @media (max-width: 768px) {
     .erp-container {
-        flex-direction: column;
+        flex-direction: row;
     }
 
     .sidebar {
-        width: 100%;
-        min-height: auto;
+        width: 64px;
+        min-width: 64px;
+        position: static;
     }
 
-    .top-navbar,
+    .sidebar-header {
+        justify-content: center;
+        padding: 20px 0;
+    }
+
+    .sidebar-header span,
+    .sidebar-menu li a span,
+    .sidebar-footer a span {
+        display: none;
+    }
+
+    .sidebar-menu {
+        padding: 12px 0;
+    }
+
+    .sidebar-menu li a {
+        justify-content: center;
+        padding: 14px 0;
+    }
+
+    .sidebar-menu li a i {
+        margin: 0;
+        font-size: 18px;
+    }
+
+    .sidebar-menu li.active a {
+        border-left: 3px solid #6366f1;
+    }
+
+    .sidebar-footer {
+        padding: 16px 0;
+        text-align: center;
+    }
+
+    .sidebar-footer a {
+        justify-content: center;
+    }
+
+    .main-wrapper {
+        min-width: 0;
+        width: calc(100vw - 64px);
+        overflow-x: hidden;
+    }
+
+    .top-navbar {
+        padding: 14px 18px;
+        gap: 10px;
+    }
+
+    .top-navbar h2 {
+        font-size: 16px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .user-profile strong {
+        display: none;
+    }
+
+    .role-pill {
+        font-size: 11px;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
     .content-body {
+        padding: 16px 14px;
+        gap: 16px;
+    }
+
+    .card-section {
         padding: 16px;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .card-section-header {
         flex-direction: column;
+        align-items: flex-start;
         gap: 12px;
+    }
+
+    .table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .portal-table {
+        min-width: 620px;
     }
 
     .field-row {

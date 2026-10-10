@@ -89,21 +89,12 @@ $total_students = count($students);
                         <span>Fees</span>
                     </a>
                 </li>
-<<<<<<< HEAD
-            <li>
-                <a href="exams.php">
-                        <i class="fas fa-file-alt"></i>
-                    <span>Exams</span>
-                </a>
-            </li>
-=======
                 <li>
                     <a href="exams.php">
                         <i class="fas fa-file-alt"></i>
                         <span>Exams</span>
                     </a>
                 </li>
->>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
                 <li>
                     <a href="result.php">
                         <i class="fas fa-poll"></i>
@@ -131,11 +122,7 @@ $total_students = count($students);
             </header>
 
             <main class="content-body">
-<<<<<<< HEAD
-                <!-- 3 Standalone Stat Boxes -->
-=======
                 <!-- 3 Dynamic Stat Boxes -->
->>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-card-top">
@@ -144,11 +131,7 @@ $total_students = count($students);
                                 <i class="fa-solid fa-layer-group"></i>
                             </div>
                         </div>
-<<<<<<< HEAD
-                        <strong class="stat-num">64</strong>
-=======
                         <strong class="stat-num"><?= $total_students ?></strong>
->>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
                     </div>
 
                     <div class="stat-card">
@@ -158,11 +141,7 @@ $total_students = count($students);
                                 <i class="fa-solid fa-circle-check"></i>
                             </div>
                         </div>
-<<<<<<< HEAD
-                        <strong class="stat-num">48</strong>
-=======
                         <strong class="stat-num"><?= $cleared_count ?></strong>
->>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
                     </div>
 
                     <div class="stat-card">
@@ -172,11 +151,7 @@ $total_students = count($students);
                                 <i class="fa-solid fa-clock-rotate-left"></i>
                             </div>
                         </div>
-<<<<<<< HEAD
-                        <strong class="stat-num">16</strong>
-=======
                         <strong class="stat-num"><?= $pending_count ?></strong>
->>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
                     </div>
                 </div>
 
@@ -185,11 +160,7 @@ $total_students = count($students);
                     <div class="card-section-header">
                         <div class="header-left">
                             <h3 class="section-title"><i class="fa-solid fa-receipt"></i> Batch Students Fee Status</h3>
-<<<<<<< HEAD
-                            <p class="sub-counter">Showing 3 Students</p>
-=======
                             <p class="sub-counter">Showing <?= $total_students ?> Students</p>
->>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
                         </div>
                         <a href="payment.php" class="portal-btn">Collect Payment</a>
                     </div>
@@ -209,38 +180,6 @@ $total_students = count($students);
                                 </tr>
                             </thead>
                             <tbody>
-<<<<<<< HEAD
-                                <tr>
-                                    <td class="font-mono">ADM-2026-001</td>
-                                    <td class="font-semibold">Aman Verma</td>
-                                    <td>JEE Morning Batch A</td>
-                                    <td>₹25,000</td>
-                                    <td>₹25,000</td>
-                                    <td>₹0</td>
-                                    <td><span class="status-tag status-paid">Paid</span></td>
-                                    <td class="td-action"><a href="#" class="action-link"><i class="fa-solid fa-print"></i> Receipt</a></td>
-                                </tr>
-                                <tr>
-                                    <td class="font-mono">ADM-2026-004</td>
-                                    <td class="font-semibold">Rhea Gupta</td>
-                                    <td>NEET Evening Batch B</td>
-                                    <td>₹30,000</td>
-                                    <td>₹15,000</td>
-                                    <td>₹15,000</td>
-                                    <td><span class="status-tag status-partial">Partial</span></td>
-                                    <td class="td-action"><a href="payment.php?id=ADM-2026-004" class="action-link"><i class="fa-solid fa-credit-card"></i> Collect</a></td>
-                                </tr>
-                                <tr>
-                                    <td class="font-mono">ADM-2026-009</td>
-                                    <td class="font-semibold">Rohit Verma</td>
-                                    <td>JEE Morning Batch A</td>
-                                    <td>₹20,000</td>
-                                    <td>₹0</td>
-                                    <td>₹20,000</td>
-                                    <td><span class="status-tag status-pending">Pending</span></td>
-                                    <td class="td-action"><a href="payment.php?id=ADM-2026-009" class="action-link"><i class="fa-solid fa-credit-card"></i> Collect</a></td>
-                                </tr>
-=======
                                 <?php if (count($students) > 0): ?>
                                     <?php foreach ($students as $st): ?>
                                         <tr>
@@ -267,7 +206,6 @@ $total_students = count($students);
                                         <td colspan="8" style="text-align:center; color:#94a3b8; padding: 20px;">No student records found.</td>
                                     </tr>
                                 <?php endif; ?>
->>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
                             </tbody>
                         </table>
                     </div>

@@ -356,23 +356,110 @@
     }
 
 }
-
-@media (max-width: 650px) {
-
-    .profile-grid {
-        grid-template-columns: 1fr;
+@media (max-width: 768px) {
+    .app-container {
+        flex-direction: row;
     }
 
-    .card-header-row {
-        align-items: flex-start;
+    .sidebar {
+        width: 64px;
+        min-width: 64px;
+        position: static;
+    }
+
+    .sidebar-header {
+        justify-content: center;
+        padding: 20px 0;
+    }
+
+    .sidebar-header span,
+    .sidebar-menu li a span,
+    .sidebar-footer a span {
+        display: none;
+    }
+
+    .sidebar-menu {
+        padding: 12px 0;
+    }
+
+    .sidebar-menu li a {
+        justify-content: center;
+        padding: 14px 0;
+    }
+
+    .sidebar-menu li a i {
+        margin: 0;
+        font-size: 18px;
+    }
+
+    .sidebar-menu li.active a {
+        border-left: 3px solid #6366f1;
+    }
+
+    .sidebar-footer {
+        padding: 16px 0;
+        text-align: center;
+    }
+
+    .sidebar-footer a {
+        justify-content: center;
+    }
+
+    .main-content {
+        min-width: 0;
+        width: calc(100vw - 64px);
+        overflow-x: hidden;
+    }
+
+    .top-navbar {
+        padding: 14px 18px;
+        gap: 10px;
+    }
+
+    .top-navbar h2 {
+        font-size: 16px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .user-profile strong {
         display: none;
     }
 
-    .data-table {
-        min-width: 650px;
+    .role-badge {
+        font-size: 11px;
+        white-space: nowrap;
+        flex-shrink: 0;
     }
 
+    .page-body {
+        padding: 16px 14px;
+    }
+
+    .profile-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .card-header-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .card {
+        padding: 16px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .data-table {
+        min-width: 580px;
+    }
 }
