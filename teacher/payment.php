@@ -111,8 +111,6 @@ if (!$active_student && count($students_list) > 0) {
                         <span>Fees</span>
                     </a>
                 </li>
-<<<<<<< HEAD
-=======
                 <li>
                     <a href="exams.php">
                         <i class="fas fa-file-alt"></i>
@@ -125,7 +123,6 @@ if (!$active_student && count($students_list) > 0) {
                         <span>Result</span>
                     </a>
                 </li>
->>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
             </ul>
             <div class="sidebar-footer">
                 <a href="/ERP-SYSTEM-FOR-COACHING/logout.php">
@@ -145,10 +142,6 @@ if (!$active_student && count($students_list) > 0) {
                 <div class="user-profile">
                     <span class="role-pill">TEACHER</span>
                     <i class="fa-regular fa-circle-user profile-icon"></i>
-<<<<<<< HEAD
-                    <span class="username"></span>
-=======
->>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
                 </div>
             </header>
 
@@ -161,15 +154,6 @@ if (!$active_student && count($students_list) > 0) {
                             <a href="fees.php" class="action-link"><i class="fa-solid fa-arrow-left"></i> Back to Fees</a>
                         </div>
 
-<<<<<<< HEAD
-                        <form class="portal-form">
-                            <div class="field-group">
-                                <label>Student</label>
-                                <select class="portal-input">
-                                    <option>ADM-2026-004 - Rhea Gupta (NEET Evening Batch B)</option>
-                                    <option>ADM-2026-009 - Rohit Verma (JEE Morning Batch A)</option>
-                                    <option>ADM-2026-001 - Aman Verma (JEE Morning Batch A)</option>
-=======
                         <?php if (!empty($message)): ?>
                             <div style="background: #dcfce7; color: #15803d; padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 14px;">
                                 <i class="fa-solid fa-circle-check"></i> <?= htmlspecialchars($message) ?>
@@ -192,7 +176,6 @@ if (!$active_student && count($students_list) > 0) {
                                             <?= htmlspecialchars($st['admission_no']) ?> - <?= htmlspecialchars($st['student_name']) ?> (<?= htmlspecialchars($st['batch_name'] ?? 'Unassigned') ?>)
                                         </option>
                                     <?php endforeach; ?>
->>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
                                 </select>
                             </div>
 
@@ -200,17 +183,6 @@ if (!$active_student && count($students_list) > 0) {
                                 <label>Payment Method</label>
                                 <div class="payment-method-group">
                                     <label class="radio-label">
-<<<<<<< HEAD
-                                        <input type="radio" name="mode" checked>
-                                        <span>UPI / QR</span>
-                                    </label>
-                                    <label class="radio-label">
-                                        <input type="radio" name="mode">
-                                        <span>Cash</span>
-                                    </label>
-                                    <label class="radio-label">
-                                        <input type="radio" name="mode">
-=======
                                         <input type="radio" name="mode" value="UPI" checked>
                                         <span>UPI / QR</span>
                                     </label>
@@ -220,7 +192,6 @@ if (!$active_student && count($students_list) > 0) {
                                     </label>
                                     <label class="radio-label">
                                         <input type="radio" name="mode" value="Bank">
->>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
                                         <span>Net Banking / Cheque</span>
                                     </label>
                                 </div>
@@ -228,37 +199,21 @@ if (!$active_student && count($students_list) > 0) {
 
                             <div class="field-row">
                                 <div class="field-group">
-<<<<<<< HEAD
-                                    <label>Amount (₹)</label>
-                                    <input type="number" class="portal-input" value="15000">
-                                </div>
-                                <div class="field-group">
-                                    <label>Transaction / Ref No.</label>
-                                    <input type="text" class="portal-input" placeholder="e.g. UPI Ref, Receipt ID">
-=======
                                     <label>Amount (₹) *</label>
                                     <input type="number" name="amount" class="portal-input" placeholder="e.g. 5000" min="1" step="0.01" required value="<?= $active_student ? $active_student['due'] : '' ?>">
                                 </div>
                                 <div class="field-group">
                                     <label>Transaction / Ref No.</label>
                                     <input type="text" name="ref_no" class="portal-input" placeholder="e.g. UPI Ref, Receipt ID">
->>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
                                 </div>
                             </div>
 
                             <div class="field-group">
                                 <label>Note / Remarks</label>
-<<<<<<< HEAD
-                                <input type="text" class="portal-input" placeholder="Installment 2 collected at centre">
-                            </div>
-
-                            <button type="button" class="portal-btn btn-submit">Submit Payment</button>
-=======
                                 <input type="text" name="remarks" class="portal-input" placeholder="e.g. Fee installment collected">
                             </div>
 
                             <button type="submit" class="portal-btn btn-submit">Submit Payment</button>
->>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
                         </form>
                     </section>
 
@@ -266,23 +221,6 @@ if (!$active_student && count($students_list) > 0) {
                     <section class="card-section">
                         <h3 class="section-title"><i class="fa-solid fa-file-invoice"></i> Student Summary</h3>
                         
-<<<<<<< HEAD
-                        <div class="info-row">
-                            <div class="row-icon"><i class="fa-solid fa-graduation-cap"></i></div>
-                            <div class="row-text">Student <strong>Rhea Gupta</strong></div>
-                        </div>
-                        <div class="info-row">
-                            <div class="row-icon"><i class="fa-solid fa-layer-group"></i></div>
-                            <div class="row-text">Batch <strong>NEET Evening Batch B</strong></div>
-                        </div>
-
-                        <div class="profile-block">
-                            <p><strong>Total Fee:</strong> ₹30,000</p>
-                            <p><strong>Paid So Far:</strong> ₹15,000</p>
-                            <p><strong>Current Due:</strong> ₹15,000</p>
-                            <p><strong>Amount Being Paid:</strong> <span class="highlight-text">₹15,000</span></p>
-                        </div>
-=======
                         <?php if ($active_student): ?>
                             <div class="info-row">
                                 <div class="row-icon"><i class="fa-solid fa-graduation-cap"></i></div>
@@ -301,7 +239,6 @@ if (!$active_student && count($students_list) > 0) {
                         <?php else: ?>
                             <p style="color: #94a3b8; text-align: center; padding: 20px;">Please select a student from the dropdown.</p>
                         <?php endif; ?>
->>>>>>> ae921aca951a77a64057d77aecbabb0efc7f2460
                     </section>
                 </div>
             </div>

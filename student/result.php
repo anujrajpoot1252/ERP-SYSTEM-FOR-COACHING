@@ -69,6 +69,7 @@ if ($student_id > 0) {
                 <a href="attendance.php">
                     <i class="fa-solid fa-calendar-check"></i>
                 <span>Attendance</span>
+                </a>
             </li>
             </ul>
 
