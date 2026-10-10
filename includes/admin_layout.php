@@ -27,20 +27,20 @@ function render_admin_header($title = "Admin Panel", $active_menu = "dashboard")
             </div>
             <ul class="sidebar-menu">
                 <li class="<?= $active_menu === 'dashboard' ? 'active' : '' ?>">
-                    <a href="/ERP-SYSTEM-FOR-COACHING/admin/dashboard.php"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+                    <a href="/ERP-SYSTEM-FOR-COACHING/admin/dashboard.php"><i class="fa-solid fa-chart-line"></i><span>Dashboard</span></a>
                 </li>
                 <li class="<?= $active_menu === 'students' ? 'active' : '' ?>">
-                    <a href="/ERP-SYSTEM-FOR-COACHING/admin/students.php"><i class="fa-solid fa-user-graduate"></i> Students</a>
+                    <a href="/ERP-SYSTEM-FOR-COACHING/admin/students.php"><i class="fa-solid fa-user-graduate"></i><span>Students</span></a>
                 </li>
                 <li class="<?= $active_menu === 'teachers' ? 'active' : '' ?>">
-                    <a href="/ERP-SYSTEM-FOR-COACHING/admin/teachers.php"><i class="fa-solid fa-chalkboard-user"></i> Teachers</a>
+                    <a href="/ERP-SYSTEM-FOR-COACHING/admin/teachers.php"><i class="fa-solid fa-chalkboard-user"></i><span>Teachers</span></a>
                 </li>
                 <li class="<?= $active_menu === 'batches' ? 'active' : '' ?>">
-                    <a href="/ERP-SYSTEM-FOR-COACHING/admin/batches.php"><i class="fa-solid fa-layer-group"></i> Batches</a>
+                    <a href="/ERP-SYSTEM-FOR-COACHING/admin/batches.php"><i class="fa-solid fa-layer-group"></i><span>Batches</span></a>
                 </li>
             </ul>
             <div class="sidebar-footer">
-                <a href="/ERP-SYSTEM-FOR-COACHING/logout.php"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+                <a href="/ERP-SYSTEM-FOR-COACHING/logout.php"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a>
             </div>
         </div>
 

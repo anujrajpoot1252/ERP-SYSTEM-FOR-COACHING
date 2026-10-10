@@ -33,17 +33,17 @@ $student = mysqli_fetch_assoc(mysqli_query($conn, "
         </div>
         <ul class="sidebar-menu">
             <li class="active">
-                <a href="#"><i class="fa-solid fa-chart-line"></i>Dashboard</a>
+                <a href="#"><i class="fa-solid fa-chart-line"></i><span>Dashboard</span></a>
             </li>
             <li>
-                <a href="result.php"><i class="fa-solid fa-poll"></i>Result</a>
+                <a href="result.php"><i class="fa-solid fa-poll"></i><span>Result</span></a>
             </li>
             <li>
-                <a href="attendance.php"><i class="fa-solid fa-calendar-check"></i></i>Attendance</a>
+                <a href="attendance.php"><i class="fa-solid fa-calendar-check"></i></i><span>Attendance</span></a>
             </li>
         </ul>
         <div class="sidebar-footer">
-            <a href="/ERP-SYSTEM-FOR-COACHING/logout.php"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+            <a href="/ERP-SYSTEM-FOR-COACHING/logout.php"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a>
         </div>
     </div>
 
@@ -62,7 +62,7 @@ $student = mysqli_fetch_assoc(mysqli_query($conn, "
                 <div class="card-title">
                     <span><i class="fa-solid fa-id-card"></i> Student Profile</span>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div class="info-grid">
                     <p><strong>Admission No:</strong> <?= htmlspecialchars($student['admission_no'] ?? 'N/A') ?></p>
                     <p><strong>Full Name:</strong> <?= htmlspecialchars($student['student_name'] ?? 'N/A') ?></p>
                     <p><strong>Email:</strong> <?= htmlspecialchars($student['email'] ?? 'N/A') ?></p>
@@ -76,7 +76,7 @@ $student = mysqli_fetch_assoc(mysqli_query($conn, "
                 <div class="card-title">
                     <span><i class="fa-solid fa-book-open"></i> Course & Batch Details</span>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div class="info-grid">
                     <p><strong>Enrolled Course:</strong> <?= htmlspecialchars($student['course_name'] ?? 'Not Enrolled') ?></p>
                     <p><strong>Course Fee:</strong> ₹<?= number_format($student['fees'] ?? 0, 2) ?></p>
                     <p><strong>Assigned Batch:</strong> <?= htmlspecialchars($student['batch_name'] ?? 'Not Assigned') ?></p>
