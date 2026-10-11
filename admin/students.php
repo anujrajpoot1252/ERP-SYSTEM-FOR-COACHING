@@ -8,14 +8,14 @@ $error = "";
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['action'] === 'add_student') {
     $name         = sanitize($conn, $_POST['name'] ?? '');
     $email        = sanitize($conn, $_POST['email'] ?? '');
-    $password     = $_POST['password'] ?? 'student123';
+    $password     = trim($_POST['password'] ?? '');
     $phone        = sanitize($conn, $_POST['phone'] ?? '');
     $parent_name  = sanitize($conn, $_POST['parent_name'] ?? '');
     $parent_phone = sanitize($conn, $_POST['parent_phone'] ?? '');
     $course_id    = intval($_POST['course_id'] ?? 0);
     $batch_id     = intval($_POST['batch_id'] ?? 0);
 
-    if (empty($name) || empty($email) || empty($phone) || empty($parent_name) || empty($parent_phone)) {
+    if (empty($name) || empty($email) || empty($password) || empty($phone) || empty($parent_name) || empty($parent_phone)) {
         $error = "Please fill in all required fields.";
     } else {
         // Check if email already exists
@@ -32,9 +32,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['
                 $user_id = mysqli_insert_id($conn);
                 $adm_no = "ADM-" . date("Y") . "-" . str_pad($user_id, 3, "0", STR_PAD_LEFT);
 
-                // 2. Insert into Student Table
+                // 2. Insert into Student Table (use NULL if course or batch not selected)
+                $course_val = $course_id > 0 ? $course_id : "NULL";
+                $batch_val  = $batch_id > 0 ? $batch_id : "NULL";
                 $student_sql = "INSERT INTO student (user_id, institute_id, admission_no, phone, parent_name, parent_phone, course_id, batch_id, status) 
-                                VALUES ($user_id, $institute_id, '$adm_no', '$phone', '$parent_name', '$parent_phone', $course_id, $batch_id, 'active')";
+                                VALUES ($user_id, $institute_id, '$adm_no', '$phone', '$parent_name', '$parent_phone', $course_val, $batch_val, 'active')";
 
                 if (mysqli_query($conn, $student_sql)) {
                     $message = "Student successfully registered with Admission No: $adm_no!";

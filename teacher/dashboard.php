@@ -160,7 +160,7 @@ $joiningDate = $teacher['joining_date'] ?? 'N/A';
                 </li>
         </ul>
         <div class="sidebar-footer">
-            <a href="/ERP-SYSTEM-FOR-COACHING/logout.php">
+            <a href="../logout.php">
                 <i class="fa-solid fa-right-from-bracket"></i>
                 <span>Logout</span>
             </a>

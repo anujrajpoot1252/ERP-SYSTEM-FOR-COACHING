@@ -8,12 +8,12 @@ $error = "";
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['action'] === 'add_teacher') {
     $name         = sanitize($conn, $_POST['name'] ?? '');
     $email        = sanitize($conn, $_POST['email'] ?? '');
-    $password     = $_POST['password'] ?? 'teacher123';
+    $password     = trim($_POST['password'] ?? '');
     $phone_no     = sanitize($conn, $_POST['phone_no'] ?? '');
     $subject      = sanitize($conn, $_POST['subject'] ?? '');
     $joining_date = sanitize($conn, $_POST['joining_date'] ?? date('Y-m-d'));
 
-    if (empty($name) || empty($email) || empty($phone_no) || empty($subject)) {
+    if (empty($name) || empty($email) || empty($password) || empty($phone_no) || empty($subject)) {
         $error = "Please fill in all required fields.";
     } else {
         // Check duplicate email

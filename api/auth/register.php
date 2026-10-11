@@ -25,10 +25,26 @@ $stmt = $conn->prepare(
 $stmt->bind_param("ssss", $name, $email, $hashedPassword, $role);
 
 if ($stmt->execute()) {
+    $userId = $stmt->insert_id;
+    $admNo = "ADM-" . date("Y") . "-" . str_pad($userId, 3, "0", STR_PAD_LEFT);
+    $phone = $_POST['phone'] ?? '';
+    $parentName = $_POST['parent_name'] ?? ('Parent of ' . $name);
+    $parentPhone = $_POST['parent_phone'] ?? '';
+    $courseId = !empty($_POST['course_id']) ? intval($_POST['course_id']) : null;
+    $batchId = !empty($_POST['batch_id']) ? intval($_POST['batch_id']) : null;
+
+    $st_stmt = $conn->prepare("INSERT INTO student (user_id, institute_id, admission_no, phone, parent_name, parent_phone, course_id, batch_id, status) VALUES (?, 1, ?, ?, ?, ?, ?, ?, 'active')");
+    if ($st_stmt) {
+        $st_stmt->bind_param("issssii", $userId, $admNo, $phone, $parentName, $parentPhone, $courseId, $batchId);
+        $st_stmt->execute();
+        $st_stmt->close();
+    }
+
     echo json_encode([
         "status" => true,
-        "message" => "User Registered",
-        "user_id" => $stmt->insert_id
+        "message" => "User and Student Profile Registered",
+        "user_id" => $userId,
+        "admission_no" => $admNo
     ]);
 } else {
     echo json_encode([

@@ -3,18 +3,20 @@ require_once __DIR__ . "/config/db.php";
 
 $error = "";
 
+$base = defined('APP_PATH') ? APP_PATH : ((isset($_SERVER['SCRIPT_NAME']) && strpos($_SERVER['SCRIPT_NAME'], '/ERP-SYSTEM-FOR-COACHING') === 0) ? '/ERP-SYSTEM-FOR-COACHING' : '');
+
 // Redirect if already logged in
 if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) {
     switch ($_SESSION['role']) {
         case 'admin':
         case 'superadmin':
-            header("Location: /ERP-SYSTEM-FOR-COACHING/admin/dashboard.php");
+            header("Location: $base/admin/dashboard.php");
             exit;
         case 'teacher':
-            header("Location: /ERP-SYSTEM-FOR-COACHING/teacher/dashboard.php");
+            header("Location: $base/teacher/dashboard.php");
             exit;
         case 'student':
-            header("Location: /ERP-SYSTEM-FOR-COACHING/student/dashboard.php");
+            header("Location: $base/student/dashboard.php");
             exit;
     }
 }
@@ -45,11 +47,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                 // Redirect based on role
                 if ($user['role'] === 'admin' || $user['role'] === 'superadmin') {
-                    header("Location: /ERP-SYSTEM-FOR-COACHING/admin/dashboard.php");
+                    header("Location: $base/admin/dashboard.php");
                 } elseif ($user['role'] === 'teacher') {
-                    header("Location: /ERP-SYSTEM-FOR-COACHING/teacher/dashboard.php");
+                    header("Location: $base/teacher/dashboard.php");
                 } elseif ($user['role'] === 'student') {
-                    header("Location: /ERP-SYSTEM-FOR-COACHING/student/dashboard.php");
+                    header("Location: $base/student/dashboard.php");
                 }
                 exit;
             } else {
@@ -68,7 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ERP Portal - Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <link rel="stylesheet" href="/ERP-SYSTEM-FOR-COACHING/assets/css/style.css">
+    <link rel="stylesheet" href="<?= $base ?>/assets/css/style.css">
 </head>
 <body>
 

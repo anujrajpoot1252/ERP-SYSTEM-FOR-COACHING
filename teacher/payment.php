@@ -125,7 +125,7 @@ if (!$active_student && count($students_list) > 0) {
                 </li>
             </ul>
             <div class="sidebar-footer">
-                <a href="/ERP-SYSTEM-FOR-COACHING/logout.php">
+                <a href="../logout.php">
                     <i class="fa-solid fa-right-from-bracket"></i>
                     <span>Logout</span>
                 </a>

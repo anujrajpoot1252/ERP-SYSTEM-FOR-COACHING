@@ -5,6 +5,20 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+// Dynamic base folder detection (works both under /ERP-SYSTEM-FOR-COACHING/ on XAMPP and at root / on port 8000)
+if (!defined('APP_PATH')) {
+    $script = $_SERVER['SCRIPT_NAME'] ?? '';
+    if (strpos($script, '/ERP-SYSTEM-FOR-COACHING') === 0) {
+        define('APP_PATH', '/ERP-SYSTEM-FOR-COACHING');
+    } else {
+        define('APP_PATH', '');
+    }
+}
+
+function app_url($path = '') {
+    return APP_PATH . '/' . ltrim($path, '/');
+}
+
 $host = "127.0.0.1";
 $user = "root";
 $pass = ""; // Default XAMPP root password
@@ -128,6 +142,8 @@ if ($results_table_check && mysqli_num_rows($results_table_check) == 0) {
 // Ensure UNIQUE constraint on attendance table to prevent duplicate records
 $attendance_unique_check = mysqli_query($conn, "SHOW INDEX FROM `attendance` WHERE Key_name = 'unique_student_batch_date'");
 if ($attendance_unique_check && mysqli_num_rows($attendance_unique_check) == 0) {
+    // Delete duplicate attendance rows keeping the latest id
+    @mysqli_query($conn, "DELETE a1 FROM attendance a1 INNER JOIN attendance a2 WHERE a1.id < a2.id AND a1.student_id = a2.student_id AND a1.batch_id = a2.batch_id AND a1.date = a2.date");
     @mysqli_query($conn, "ALTER TABLE `attendance` ADD UNIQUE KEY `unique_student_batch_date` (`student_id`, `batch_id`, `date`)");
 }
 

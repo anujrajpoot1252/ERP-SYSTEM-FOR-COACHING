@@ -132,7 +132,8 @@ CREATE TABLE `attendance` (
   `phone_number_parents` VARCHAR(50) NULL,
   `marking` VARCHAR(20) NULL,
   FOREIGN KEY (`student_id`) REFERENCES `student`(`id`) ON DELETE CASCADE,
-  FOREIGN KEY (`batch_id`) REFERENCES `batch`(`id`) ON DELETE CASCADE
+  FOREIGN KEY (`batch_id`) REFERENCES `batch`(`id`) ON DELETE CASCADE,
+  UNIQUE KEY `unique_student_batch_date` (`student_id`, `batch_id`, `date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 8. Fee Payment Table

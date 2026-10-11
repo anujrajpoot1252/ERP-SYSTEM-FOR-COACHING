@@ -1,7 +1,7 @@
 <?php
 require "../config/db.php";
 
-$result = mysqli_query($conn, "SELECT id, batch_name FROM batch");
+$result = mysqli_query($conn, "SELECT id, name AS batch_name, name FROM batch");
 
 $data = [];
 

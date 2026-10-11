@@ -6,8 +6,11 @@ $protocol = (
 ) ? 'https://' : 'http://';
 
 $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+$base_folder = (isset($_SERVER['SCRIPT_NAME']) && strpos($_SERVER['SCRIPT_NAME'], '/ERP-SYSTEM-FOR-COACHING') === 0) ? '/ERP-SYSTEM-FOR-COACHING' : '';
 
-define('BASE_URL', $protocol . $host);
+if (!defined('BASE_URL')) {
+    define('BASE_URL', $protocol . $host . $base_folder);
+}
 
 function url(string $path = ''): string
 {

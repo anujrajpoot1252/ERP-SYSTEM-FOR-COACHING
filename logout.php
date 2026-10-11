@@ -14,6 +14,7 @@ if (ini_get("session.use_cookies")) {
 }
 
 session_destroy();
-header("Location: /ERP-SYSTEM-FOR-COACHING/login.php");
+$base = (isset($_SERVER['SCRIPT_NAME']) && strpos($_SERVER['SCRIPT_NAME'], '/ERP-SYSTEM-FOR-COACHING') === 0) ? '/ERP-SYSTEM-FOR-COACHING' : '';
+header("Location: " . $base . "/login.php");
 exit;
 ?>

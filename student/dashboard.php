@@ -22,7 +22,7 @@ $student = mysqli_fetch_assoc(mysqli_query($conn, "
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Portal - Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <link rel="stylesheet" href="/ERP-SYSTEM-FOR-COACHING/assets/css/style.css">
+    <link rel="stylesheet" href="<?= defined('APP_PATH') ? APP_PATH : '' ?>/assets/css/style.css">
 </head>
 <body>
 <div class="app-container">
@@ -43,7 +43,7 @@ $student = mysqli_fetch_assoc(mysqli_query($conn, "
             </li>
         </ul>
         <div class="sidebar-footer">
-            <a href="/ERP-SYSTEM-FOR-COACHING/logout.php"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a>
+            <a href="../logout.php"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a>
         </div>
     </div>
 
