@@ -1,5 +1,5 @@
 
-const API_URL = "/ERP-SYSTEM-FOR-COACHING/teacher/attendance_api.php";
+const API_URL = "attendance_api.php";
 const batchSelect = document.getElementById("batch-select");
 const dateInput = document.getElementById("attendance-date");
 const loadButton = document.querySelector(".filter-button button");

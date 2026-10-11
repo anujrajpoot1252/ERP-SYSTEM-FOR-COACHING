@@ -1,3 +1,9 @@
+<?php
+require_once __DIR__ . "/../config/db.php";
+require_once __DIR__ . "/../includes/auth_check.php";
+check_access(['superadmin']);
+$base = defined('APP_PATH') ? APP_PATH : ((isset($_SERVER['SCRIPT_NAME']) && strpos($_SERVER['SCRIPT_NAME'], '/ERP-SYSTEM-FOR-COACHING') === 0) ? '/ERP-SYSTEM-FOR-COACHING' : '');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,7 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Super Admin Dashboard - ERP Admin</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <link rel="stylesheet" href="/ERP-SYSTEM-FOR-COACHING/assets/css/style.css">
+    <link rel="stylesheet" href="<?= $base ?>/assets/css/style.css">
     <style>
         .status-pill {
             display: inline-block;
@@ -41,7 +47,7 @@
             </li>
         </ul>
         <div class="sidebar-footer">
-            <a href="/ERP-SYSTEM-FOR-COACHING/logout.php"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a>
+            <a href="../logout.php"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a>
         </div>
     </div>
 

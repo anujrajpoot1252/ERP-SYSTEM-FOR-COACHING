@@ -74,7 +74,7 @@ if ($student_id > 0) {
             </ul>
 
             <div class="sidebar-footer">
-                <a href="/ERP-SYSTEM-FOR-COACHING/logout.php">
+                <a href="../logout.php">
                     <i class="fa-solid fa-right-from-bracket"></i>
                     <span>Logout</span>
                 </a>

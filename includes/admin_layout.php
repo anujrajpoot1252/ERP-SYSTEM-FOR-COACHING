@@ -7,6 +7,7 @@ check_access(['admin', 'superadmin']);
 function render_admin_header($title = "Admin Panel", $active_menu = "dashboard") {
     $user_name = htmlspecialchars($_SESSION['name'] ?? 'Admin');
     $user_role = htmlspecialchars($_SESSION['role'] ?? 'Admin');
+    $base = defined('APP_PATH') ? APP_PATH : ((isset($_SERVER['SCRIPT_NAME']) && strpos($_SERVER['SCRIPT_NAME'], '/ERP-SYSTEM-FOR-COACHING') === 0) ? '/ERP-SYSTEM-FOR-COACHING' : '');
     ?>
     <!DOCTYPE html>
     <html lang="en">
@@ -15,7 +16,7 @@ function render_admin_header($title = "Admin Panel", $active_menu = "dashboard")
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title><?= htmlspecialchars($title) ?> - ERP Admin</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-        <link rel="stylesheet" href="/ERP-SYSTEM-FOR-COACHING/assets/css/style.css">
+        <link rel="stylesheet" href="<?= $base ?>/assets/css/style.css">
     </head>
     <body>
     <div class="app-container">
@@ -27,20 +28,20 @@ function render_admin_header($title = "Admin Panel", $active_menu = "dashboard")
             </div>
             <ul class="sidebar-menu">
                 <li class="<?= $active_menu === 'dashboard' ? 'active' : '' ?>">
-                    <a href="/ERP-SYSTEM-FOR-COACHING/admin/dashboard.php"><i class="fa-solid fa-chart-line"></i><span>Dashboard</span></a>
+                    <a href="<?= $base ?>/admin/dashboard.php"><i class="fa-solid fa-chart-line"></i><span>Dashboard</span></a>
                 </li>
                 <li class="<?= $active_menu === 'students' ? 'active' : '' ?>">
-                    <a href="/ERP-SYSTEM-FOR-COACHING/admin/students.php"><i class="fa-solid fa-user-graduate"></i><span>Students</span></a>
+                    <a href="<?= $base ?>/admin/students.php"><i class="fa-solid fa-user-graduate"></i><span>Students</span></a>
                 </li>
                 <li class="<?= $active_menu === 'teachers' ? 'active' : '' ?>">
-                    <a href="/ERP-SYSTEM-FOR-COACHING/admin/teachers.php"><i class="fa-solid fa-chalkboard-user"></i><span>Teachers</span></a>
+                    <a href="<?= $base ?>/admin/teachers.php"><i class="fa-solid fa-chalkboard-user"></i><span>Teachers</span></a>
                 </li>
                 <li class="<?= $active_menu === 'batches' ? 'active' : '' ?>">
-                    <a href="/ERP-SYSTEM-FOR-COACHING/admin/batches.php"><i class="fa-solid fa-layer-group"></i><span>Batches</span></a>
+                    <a href="<?= $base ?>/admin/batches.php"><i class="fa-solid fa-layer-group"></i><span>Batches</span></a>
                 </li>
             </ul>
             <div class="sidebar-footer">
-                <a href="/ERP-SYSTEM-FOR-COACHING/logout.php"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a>
+                <a href="<?= $base ?>/logout.php"><i class="fa-solid fa-right-from-bracket"></i><span>Logout</span></a>
             </div>
         </div>
 

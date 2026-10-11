@@ -85,6 +85,7 @@ CREATE TABLE `batch` (
   `course_id` INT NOT NULL,
   `teacher_id` INT DEFAULT NULL,
   `name` VARCHAR(100) NOT NULL,
+  `batch_name` VARCHAR(100) NULL,
   `start_date` DATE NULL,
   `ending_date` DATE NULL,
   `timing_status` TIME NULL,
@@ -95,9 +96,9 @@ CREATE TABLE `batch` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Seed Default Batches
-INSERT INTO `batch` (`id`, `institute_id`, `course_id`, `teacher_id`, `name`, `start_date`, `ending_date`, `timing_status`, `schedule`) VALUES
-(1, 1, 1, 1, 'JEE Morning Batch A', '2026-04-01', '2027-03-31', '08:00:00', 'Mon - Sat'),
-(2, 1, 2, 1, 'NEET Evening Batch B', '2026-04-01', '2027-03-31', '16:00:00', 'Mon - Fri');
+INSERT INTO `batch` (`id`, `institute_id`, `course_id`, `teacher_id`, `name`, `batch_name`, `start_date`, `ending_date`, `timing_status`, `schedule`) VALUES
+(1, 1, 1, 1, 'JEE Morning Batch A', 'JEE Morning Batch A', '2026-04-01', '2027-03-31', '08:00:00', 'Mon - Sat'),
+(2, 1, 2, 1, 'NEET Evening Batch B', 'NEET Evening Batch B', '2026-04-01', '2027-03-31', '16:00:00', 'Mon - Fri');
 
 -- 6. Student Table
 CREATE TABLE `student` (
@@ -132,7 +133,8 @@ CREATE TABLE `attendance` (
   `phone_number_parents` VARCHAR(50) NULL,
   `marking` VARCHAR(20) NULL,
   FOREIGN KEY (`student_id`) REFERENCES `student`(`id`) ON DELETE CASCADE,
-  FOREIGN KEY (`batch_id`) REFERENCES `batch`(`id`) ON DELETE CASCADE
+  FOREIGN KEY (`batch_id`) REFERENCES `batch`(`id`) ON DELETE CASCADE,
+  UNIQUE KEY `unique_student_batch_date` (`student_id`, `batch_id`, `date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 8. Fee Payment Table

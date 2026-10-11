@@ -58,7 +58,11 @@ $marking = $marking === '' ? null : $marking;
 $stmt = $conn->prepare(
 	"INSERT INTO attendance
 	 (student_id, batch_id, `date`, status, phone_number_parents, marking)
-	 VALUES (?, ?, ?, ?, ?, ?)"
+	 VALUES (?, ?, ?, ?, ?, ?)
+	 ON DUPLICATE KEY UPDATE
+	 status = VALUES(status),
+	 phone_number_parents = COALESCE(VALUES(phone_number_parents), phone_number_parents),
+	 marking = COALESCE(VALUES(marking), marking)"
 );
 
 if (!$stmt) {

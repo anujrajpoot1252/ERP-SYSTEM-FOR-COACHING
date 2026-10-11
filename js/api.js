@@ -1,7 +1,11 @@
 import axios from "https://cdn.jsdelivr.net/npm/axios@1.11.0/+esm";
 
+const basePath = window.location.pathname.startsWith("/ERP-SYSTEM-FOR-COACHING")
+    ? "/ERP-SYSTEM-FOR-COACHING"
+    : "";
+
 export const API = axios.create({
-    baseURL: window.location.origin + "/ERP-SYSTEM-FOR-COACHING",
+    baseURL: window.location.origin + basePath,
     headers: {
         "Content-Type": "application/json"
     },
