@@ -28,7 +28,7 @@ $conn = @mysqli_connect($host, $user, $pass);
 
 if (!$conn) {
     // Try with fallback password if set
-    $pass = "kunal123";
+    $pass = "";
     $conn = @mysqli_connect($host, $user, $pass);
     if (!$conn) {
         die("Database Connection Error: " . mysqli_connect_error());
