@@ -16,12 +16,18 @@ $present_count = 0;
 $absent_count = 0;
 
 if ($student_id > 0) {
+    $batch_name_col = "b.name";
+    $batch_col_check = @mysqli_query($conn, "SHOW COLUMNS FROM `batch` LIKE 'name'");
+    if (!$batch_col_check || mysqli_num_rows($batch_col_check) === 0) {
+        $batch_name_col = "b.batch_name";
+    }
+
     $att_query = mysqli_query($conn, "
         SELECT 
             a.id,
             a.date,
             a.status,
-            b.name as batch_name,
+            {$batch_name_col} as batch_name,
             b.timing_status,
             b.schedule,
             c.course_name,

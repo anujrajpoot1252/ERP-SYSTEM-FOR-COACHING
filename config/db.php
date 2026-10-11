@@ -147,6 +147,61 @@ if ($attendance_unique_check && mysqli_num_rows($attendance_unique_check) == 0) 
     @mysqli_query($conn, "ALTER TABLE `attendance` ADD UNIQUE KEY `unique_student_batch_date` (`student_id`, `batch_id`, `date`)");
 }
 
+// Ensure batch table columns (name & batch_name) are synchronized and compatible across schemas
+$batch_table_check = mysqli_query($conn, "SHOW TABLES LIKE 'batch'");
+if ($batch_table_check && mysqli_num_rows($batch_table_check) > 0) {
+    $has_name = mysqli_num_rows(mysqli_query($conn, "SHOW COLUMNS FROM `batch` LIKE 'name'")) > 0;
+    $has_batch_name = mysqli_num_rows(mysqli_query($conn, "SHOW COLUMNS FROM `batch` LIKE 'batch_name'")) > 0;
+
+    if (!$has_name && $has_batch_name) {
+        @mysqli_query($conn, "ALTER TABLE `batch` ADD COLUMN `name` VARCHAR(100) NULL AFTER `course_id`");
+        @mysqli_query($conn, "UPDATE `batch` SET `name` = `batch_name` WHERE `name` IS NULL OR `name` = ''");
+    } elseif ($has_name && !$has_batch_name) {
+        @mysqli_query($conn, "ALTER TABLE `batch` ADD COLUMN `batch_name` VARCHAR(100) NULL AFTER `name`");
+        @mysqli_query($conn, "UPDATE `batch` SET `batch_name` = `name` WHERE `batch_name` IS NULL OR `batch_name` = ''");
+    }
+
+    $has_timing = mysqli_num_rows(mysqli_query($conn, "SHOW COLUMNS FROM `batch` LIKE 'timing_status'")) > 0;
+    if (!$has_timing) {
+        @mysqli_query($conn, "ALTER TABLE `batch` ADD COLUMN `timing_status` TIME NULL");
+    }
+
+    $has_schedule = mysqli_num_rows(mysqli_query($conn, "SHOW COLUMNS FROM `batch` LIKE 'schedule'")) > 0;
+    if (!$has_schedule) {
+        @mysqli_query($conn, "ALTER TABLE `batch` ADD COLUMN `schedule` VARCHAR(255) NULL");
+    }
+}
+
+// Ensure teacher table has joining_date compatible with older databases having 'joining'
+$teacher_table_check = mysqli_query($conn, "SHOW TABLES LIKE 'teacher'");
+if ($teacher_table_check && mysqli_num_rows($teacher_table_check) > 0) {
+    $has_joining_date = mysqli_num_rows(mysqli_query($conn, "SHOW COLUMNS FROM `teacher` LIKE 'joining_date'")) > 0;
+    $has_joining = mysqli_num_rows(mysqli_query($conn, "SHOW COLUMNS FROM `teacher` LIKE 'joining'")) > 0;
+
+    if (!$has_joining_date && $has_joining) {
+        @mysqli_query($conn, "ALTER TABLE `teacher` ADD COLUMN `joining_date` DATE NULL AFTER `subject`");
+        @mysqli_query($conn, "UPDATE `teacher` SET `joining_date` = `joining` WHERE `joining_date` IS NULL");
+    } elseif ($has_joining_date && !$has_joining) {
+        @mysqli_query($conn, "ALTER TABLE `teacher` ADD COLUMN `joining` DATE NULL AFTER `subject`");
+        @mysqli_query($conn, "UPDATE `teacher` SET `joining` = `joining_date` WHERE `joining` IS NULL");
+    }
+}
+
+// Ensure course table has course_name
+$course_table_check = mysqli_query($conn, "SHOW TABLES LIKE 'course'");
+if ($course_table_check && mysqli_num_rows($course_table_check) > 0) {
+    $has_course_name = mysqli_num_rows(mysqli_query($conn, "SHOW COLUMNS FROM `course` LIKE 'course_name'")) > 0;
+    $has_c_name = mysqli_num_rows(mysqli_query($conn, "SHOW COLUMNS FROM `course` LIKE 'name'")) > 0;
+
+    if (!$has_course_name && $has_c_name) {
+        @mysqli_query($conn, "ALTER TABLE `course` ADD COLUMN `course_name` VARCHAR(100) NULL AFTER `institute_id`");
+        @mysqli_query($conn, "UPDATE `course` SET `course_name` = `name` WHERE `course_name` IS NULL");
+    } elseif ($has_course_name && !$has_c_name) {
+        @mysqli_query($conn, "ALTER TABLE `course` ADD COLUMN `name` VARCHAR(100) NULL AFTER `course_name`");
+        @mysqli_query($conn, "UPDATE `course` SET `name` = `course_name` WHERE `name` IS NULL");
+    }
+}
+
 // Helper sanitize function
 function sanitize($conn, $data) {
     return mysqli_real_escape_string($conn, trim($data));

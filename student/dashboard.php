@@ -4,15 +4,24 @@ require_once __DIR__ . "/../includes/auth_check.php";
 
 check_access(['student']);
 
-$user_id = $_SESSION['user_id'];
-$student = mysqli_fetch_assoc(mysqli_query($conn, "
-    SELECT s.*, u.name as student_name, u.email, c.course_name, c.fees, b.name as batch_name, b.schedule, b.timing_status 
+$user_id = (int)($_SESSION['user_id'] ?? 0);
+
+// Dynamically check if column 'name' or 'batch_name' exists in batch table
+$batch_name_col = "b.name";
+$batch_col_check = @mysqli_query($conn, "SHOW COLUMNS FROM `batch` LIKE 'name'");
+if (!$batch_col_check || mysqli_num_rows($batch_col_check) === 0) {
+    $batch_name_col = "b.batch_name";
+}
+
+$student_res = mysqli_query($conn, "
+    SELECT s.*, u.name as student_name, u.email, c.course_name, c.fees, {$batch_name_col} as batch_name, b.schedule, b.timing_status 
     FROM student s 
     JOIN users u ON s.user_id = u.id 
     LEFT JOIN course c ON s.course_id = c.id 
     LEFT JOIN batch b ON s.batch_id = b.id 
     WHERE s.user_id = $user_id
-"));
+");
+$student = $student_res ? mysqli_fetch_assoc($student_res) : null;
 
 ?>
 <!DOCTYPE html>
