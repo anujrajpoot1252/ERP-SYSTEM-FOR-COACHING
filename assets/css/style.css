@@ -396,11 +396,20 @@ body {
     margin-top: 20px;
 }
 
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
 @media (max-width: 768px) {
     .app-container {
         flex-direction: row;
     }
-
+    
+    .table-responsive .data-table {
+        min-width: 600px;
+    }
     .sidebar {
         width: 64px;
         min-width: 64px;
@@ -451,6 +460,13 @@ body {
         overflow-x: hidden;
     }
 
+    .card {
+        padding: 16px;
+        width: 100%;
+        box-sizing: border-box;
+        overflow: hidden; 
+    }
+
     .top-navbar {
         padding: 14px 18px;
         gap: 10px;
@@ -484,14 +500,6 @@ body {
     .stats-grid {
         grid-template-columns: 1fr;
         gap: 14px;
-    }
-
-    .card {
-        padding: 16px;
-        width: 100%;
-        box-sizing: border-box;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
     }
 
     .data-table {

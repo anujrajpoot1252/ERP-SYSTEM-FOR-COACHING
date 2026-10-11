@@ -28,16 +28,16 @@
         </div>
         <ul class="sidebar-menu">
             <li class="active">
-                <a href="#"><i class="fa-solid fa-chart-line"></i><span>Dashboard</span></a>
+                <a href="/ERP-SYSTEM-FOR-COACHING/superadmin/dashboard.php"><i class="fa-solid fa-chart-line"></i> <span>Dashboard</span></a>
             </li>
             <li>
-                <a href="#"><i class="fa-solid fa-building-columns"></i><span>Institutes</span></a>
+                <a href="/ERP-SYSTEM-FOR-COACHING/superadmin/institutes.php"><i class="fa-solid fa-building-columns"></i> <span>Institutes</span></a>
             </li>
             <li>
-                <a href="#"><i class="fa-solid fa-plus-circle"></i><span>Add Institute</span></a>
+                <a href="/ERP-SYSTEM-FOR-COACHING/superadmin/add_institute.php"><i class="fa-solid fa-plus-circle"></i> <span>Add Institute</span></a>
             </li>
             <li>
-                <a href="#"><i class="fa-solid fa-credit-card"></i><span>Subscriptions</span></a>
+                <a href="/ERP-SYSTEM-FOR-COACHING/superadmin/subscriptions.php"><i class="fa-solid fa-credit-card"></i> <span>Subscriptions</span></a>
             </li>
         </ul>
         <div class="sidebar-footer">
@@ -61,7 +61,7 @@
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="info">
-                        <h3>14</h3>
+                        <h3>3</h3>
                         <p>Total Institutes</p>
                     </div>
                     <div class="icon bg-blue">
@@ -71,7 +71,7 @@
 
                 <div class="stat-card">
                     <div class="info">
-                        <h3>11</h3>
+                        <h3>2</h3>
                         <p>Active</p>
                     </div>
                     <div class="icon bg-green">
@@ -81,7 +81,7 @@
 
                 <div class="stat-card">
                     <div class="info">
-                        <h3>3</h3>
+                        <h3>1</h3>
                         <p>Trial</p>
                     </div>
                     <div class="icon bg-orange">
@@ -92,50 +92,52 @@
 
             <!-- Institutes Directory Table -->
             <div class="card">
-                <div class="card-title">
-                    <span><i class="fa-solid fa-building-columns"></i> Registered Institutes</span>
-                    <a href="/ERP-SYSTEM-FOR-COACHING/superadmin/institutes.php" class="btn-primary" style="padding: 6px 14px; text-decoration: none; font-size: 13px; width: auto;">View All</a>
-                </div>
+    <div class="card-title">
+        <span><i class="fa-solid fa-building-columns"></i> Registered Institutes</span>
+        <a href="/ERP-SYSTEM-FOR-COACHING/superadmin/institutes.php" class="btn-primary" style="padding: 6px 14px; text-decoration: none; font-size: 13px; width: auto;">View All</a>
+    </div>
 
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Institute ID</th>
-                            <th>Institute Name</th>
-                            <th>Admin Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>INS-2026-001</strong></td>
-                            <td>Science Academy</td>
-                            <td>Ramesh Sharma</td>
-                            <td>ramesh@academy.com</td>
-                            <td>9876543210</td>
-                            <td><span class="status-pill pill-active">Active</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>INS-2026-002</strong></td>
-                            <td>JEE Classes</td>
-                            <td>Sunita Verma</td>
-                            <td>admin@co.org</td>
-                            <td>9123456780</td>
-                            <td><span class="status-pill pill-trial">Trial</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>INS-2026-003</strong></td>
-                            <td>CA Hub</td>
-                            <td>Vikram Seth</td>
-                            <td>info@cahub.in</td>
-                            <td>9988776655</td>
-                            <td><span class="status-pill pill-active">Active</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Institute ID</th>
+                    <th>Institute Name</th>
+                    <th>Admin Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>INS-2026-001</strong></td>
+                    <td>Science Academy</td>
+                    <td>Ramesh Sharma</td>
+                    <td>ramesh@academy.com</td>
+                    <td>9876543210</td>
+                    <td><span class="status-pill pill-active">Active</span></td>
+                </tr>
+                <tr>
+                    <td><strong>INS-2026-002</strong></td>
+                    <td>JEE Classes</td>
+                    <td>Sunita Verma</td>
+                    <td>admin@co.org</td>
+                    <td>9123456780</td>
+                    <td><span class="status-pill pill-trial">Trial</span></td>
+                </tr>
+                <tr>
+                    <td><strong>INS-2026-003</strong></td>
+                    <td>CA Hub</td>
+                    <td>Vikram Seth</td>
+                    <td>info@cahub.in</td>
+                    <td>9988776655</td>
+                    <td><span class="status-pill pill-active">Active</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
         </div>
     </div>
 </div>
