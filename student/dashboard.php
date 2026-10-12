@@ -42,16 +42,29 @@ $student = $student_res ? mysqli_fetch_assoc($student_res) : null;
         </div>
         <ul class="sidebar-menu">
             <li class="active">
-                <a href="#"><i class="fa-solid fa-chart-line"></i><span>Dashboard</span></a>
+                <a href="#">
+                <i class="fa-solid fa-chart-line"></i>
+                <span>Dashboard</span></a>
             </li>
             <li>
-                <a href="result.php"><i class="fa-solid fa-poll"></i><span>Result</span></a>
+                <a href="result.php">
+                <i class="fa-solid fa-poll"></i>
+                <span>Result</span></a>
             </li>
             <li>
-                <a href="attendance.php"><i class="fa-solid fa-calendar-check"></i></i><span>Attendance</span></a>
+                <a href="marksheet.php">
+                <i class="fa-solid fa-file-invoice"></i>
+                <span>Marksheet</span></a>
             </li>
             <li>
-                <a href="fees.php"><i class="fa-solid fa-credit-card"></i><span>Fees</span></a>
+                <a href="attendance.php">
+                <i class="fa-solid fa-calendar-check"></i>
+                <span>Attendance</span></a>
+            </li>
+            <li>
+                <a href="fees.php">
+                <i class="fa-solid fa-credit-card"></i>
+                <span>Fees</span></a>
             </li>
         </ul>
         <div class="sidebar-footer">

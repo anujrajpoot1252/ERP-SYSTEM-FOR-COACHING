@@ -29,6 +29,11 @@
                         <span>Results</span>
                     </a>
                 </li>
+            <li>
+                <a href="marksheet.php">
+                <i class="fa-solid fa-file-invoice"></i>
+                <span>Marksheet</span></a>
+            </li>
                 <li>
                     <a href="attendance.php">
                         <i class="fa-solid fa-calendar-check"></i>

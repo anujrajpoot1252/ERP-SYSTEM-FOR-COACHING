@@ -93,6 +93,11 @@ $attendance_rate = $total_sessions > 0 ? round(($present_count / $total_sessions
                         <span>Attendance</span>
                     </a>
                 </li>
+            <li>
+                <a href="marksheet.php">
+                <i class="fa-solid fa-file-invoice"></i>
+                <span>Marksheet</span></a>
+            </li>
                 <li>
                     <a href="fees.php">
                         <i class="fa-solid fa-credit-card"></i>
