@@ -2,60 +2,97 @@
 // Config: Database Connection & Initialization
 
 if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+$secure_cookie = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+ini_set('session.use_strict_mode', '1');
+ini_set('session.use_only_cookies', '1');
+session_set_cookie_params([
+    'lifetime' => 0,
+    'path' => '/',
+    'secure' => $secure_cookie,
+    'httponly' => true,
+    'samesite' => 'Lax',
+]);
+session_start();
 }
 
-// Dynamic base folder detection (works both under /ERP-SYSTEM-FOR-COACHING/ on XAMPP and at root / on port 8000)
 if (!defined('APP_PATH')) {
-    $script = $_SERVER['SCRIPT_NAME'] ?? '';
-    if (strpos($script, '/ERP-SYSTEM-FOR-COACHING') === 0) {
-        define('APP_PATH', '/ERP-SYSTEM-FOR-COACHING');
-    } else {
-        define('APP_PATH', '');
-    }
+$script_name = $_SERVER['SCRIPT_NAME'] ?? '';
+define(
+    'APP_PATH',
+    strpos($script_name, '/ERP-SYSTEM-FOR-COACHING') === 0
+        ? '/ERP-SYSTEM-FOR-COACHING'
+        : ''
+);
 }
 
+if (!function_exists('app_url')) {
 function app_url($path = '') {
     return APP_PATH . '/' . ltrim($path, '/');
 }
-
-$host = "127.0.0.1";
-$user = "root";
-$pass = ""; // Default XAMPP root password
-
-// 1. Establish connection to MySQL server
-$conn = @mysqli_connect($host, $user, $pass);
-
-if (!$conn) {
-    // Try with fallback password if set
-    $pass = "";
-    $conn = @mysqli_connect($host, $user, $pass);
-    if (!$conn) {
-        die("Database Connection Error: " . mysqli_connect_error());
-    }
 }
 
-// 2. Create database if it does not exist
-mysqli_query($conn, "CREATE DATABASE IF NOT EXISTS `erp_system` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-// 3. Select erp_system database
-mysqli_select_db($conn, "erp_system");
-
-// 4. Ensure tables exist by checking users table
-$table_check = mysqli_query($conn, "SHOW TABLES LIKE 'users'");
-if (mysqli_num_rows($table_check) == 0) {
-    $schema_file = __DIR__ . "/../schema/schema.sql";
-    if (file_exists($schema_file)) {
-        $sql = file_get_contents($schema_file);
-        // Multi query execution
-        if (mysqli_multi_query($conn, $sql)) {
-            do {
-                if ($res = mysqli_store_result($conn)) {
-                    mysqli_free_result($res);
-                }
-            } while (mysqli_more_results($conn) && mysqli_next_result($conn));
+$env_file = __DIR__ . '/../.env';
+if (is_readable($env_file)) {
+$environment = parse_ini_file($env_file, false, INI_SCANNER_RAW);
+if (is_array($environment)) {
+    foreach ($environment as $key => $value) {
+        if (getenv($key) === false) {
+            putenv($key . '=' . $value);
         }
     }
+}
+}
+
+$host = getenv('DB_HOST') ?: '127.0.0.1';
+$user = getenv('DB_USER') ?: 'root';
+$pass = getenv('DB_PASSWORD') ?: '';
+$database = getenv('DB_NAME') ?: 'erp_system';
+if (!preg_match('/^[A-Za-z0-9_]+$/', $database)) {
+throw new RuntimeException('DB_NAME contains invalid characters.');
+}
+
+try {
+$conn = mysqli_connect($host, $user, $pass);
+mysqli_set_charset($conn, 'utf8mb4');
+mysqli_query($conn, "CREATE DATABASE IF NOT EXISTS `$database` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
+mysqli_select_db($conn, $database);
+} catch (Throwable $exception) {
+error_log('ERP database connection failed: ' . $exception->getMessage());
+http_response_code(500);
+exit('Database connection failed. Check the server configuration and error log.');
+}
+
+// Initialize only a truly empty database; never run the destructive schema over partial data.
+$table_check = mysqli_query($conn, 'SHOW TABLES');
+if (mysqli_num_rows($table_check) === 0) {
+$schema_file = __DIR__ . "/../schema/schema.sql";
+if (file_exists($schema_file)) {
+    $sql = file_get_contents($schema_file);
+    if ($sql === false || !mysqli_multi_query($conn, $sql)) {
+        error_log('ERP schema initialization failed: ' . mysqli_error($conn));
+        http_response_code(500);
+        exit('Database schema initialization failed. Check the server error log.');
+    }
+    do {
+        if ($result = mysqli_store_result($conn)) {
+            mysqli_free_result($result);
+        }
+        if (mysqli_more_results($conn) && !mysqli_next_result($conn)) {
+            error_log('ERP schema initialization failed: ' . mysqli_error($conn));
+            http_response_code(500);
+            exit('Database schema initialization failed. Check the server error log.');
+        }
+    } while (mysqli_more_results($conn));
+}
+} else {
+$users_table_check = mysqli_query($conn, "SHOW TABLES LIKE 'users'");
+if (mysqli_num_rows($users_table_check) === 0) {
+    error_log('ERP database contains tables but is missing the users table; automatic schema import was refused.');
+    http_response_code(500);
+    exit('The selected database is incomplete. Import schema/schema.sql only after backing up existing data.');
+}
 }
 
 // Add the fee table for databases initialized before fee tracking was introduced.
@@ -64,22 +101,59 @@ if ($fees_table_check && mysqli_num_rows($fees_table_check) == 0) {
     mysqli_query($conn, "CREATE TABLE IF NOT EXISTS `fees` (
         `id` INT AUTO_INCREMENT PRIMARY KEY,
         `student_id` INT NOT NULL,
+        `course_id` INT NULL,
         `amount` DECIMAL(10,2) NOT NULL,
-        `cashback` DECIMAL(10,2) DEFAULT 0.00,
-        `payment_mode` VARCHAR(50) DEFAULT 'Cash',
+        `cashback` DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+        `payment_mode` VARCHAR(50) NOT NULL DEFAULT 'Cash',
         `ref_no` VARCHAR(100) NULL,
         `remarks` VARCHAR(255) NULL,
+        `status` ENUM('created','paid','failed') NOT NULL DEFAULT 'paid',
+        `order_id` VARCHAR(100) NULL,
+        `payment_id` VARCHAR(100) NULL,
         `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         INDEX `idx_fees_student_id` (`student_id`),
-        FOREIGN KEY (`student_id`) REFERENCES `student`(`id`) ON DELETE CASCADE
+        UNIQUE KEY `unique_fees_order_id` (`order_id`),
+        UNIQUE KEY `unique_fees_payment_id` (`payment_id`),
+        FOREIGN KEY (`student_id`) REFERENCES `student`(`id`) ON DELETE CASCADE,
+        FOREIGN KEY (`course_id`) REFERENCES `course`(`id`) ON DELETE SET NULL
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 } else {
-    $cashback_col_check = mysqli_query($conn, "SHOW COLUMNS FROM `fees` LIKE 'cashback'");
-    if ($cashback_col_check && mysqli_num_rows($cashback_col_check) == 0) {
-        @mysqli_query($conn, "ALTER TABLE `fees` ADD COLUMN `cashback` DECIMAL(10,2) DEFAULT 0.00 AFTER `amount`");
-        @mysqli_query($conn, "ALTER TABLE `fees` ADD COLUMN `payment_mode` VARCHAR(50) DEFAULT 'Cash' AFTER `cashback`");
-        @mysqli_query($conn, "ALTER TABLE `fees` ADD COLUMN `ref_no` VARCHAR(100) NULL AFTER `payment_mode`");
-        @mysqli_query($conn, "ALTER TABLE `fees` ADD COLUMN `remarks` VARCHAR(255) NULL AFTER `ref_no`");
+    $fee_columns = [
+        'course_id' => '`course_id` INT NULL',
+        'cashback' => '`cashback` DECIMAL(10,2) NOT NULL DEFAULT 0.00',
+        'payment_mode' => "`payment_mode` VARCHAR(50) NOT NULL DEFAULT 'Cash'",
+        'ref_no' => '`ref_no` VARCHAR(100) NULL',
+        'remarks' => '`remarks` VARCHAR(255) NULL',
+        'status' => "`status` ENUM('created','paid','failed') NOT NULL DEFAULT 'paid'",
+        'order_id' => '`order_id` VARCHAR(100) NULL',
+        'payment_id' => '`payment_id` VARCHAR(100) NULL'
+    ];
+    foreach ($fee_columns as $column => $definition) {
+        $column_check = mysqli_prepare($conn, "
+            SELECT 1 FROM information_schema.COLUMNS
+            WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'fees' AND COLUMN_NAME = ?
+        ");
+        mysqli_stmt_bind_param($column_check, 's', $column);
+        mysqli_stmt_execute($column_check);
+        $column_exists = mysqli_stmt_get_result($column_check)->num_rows > 0;
+        mysqli_stmt_close($column_check);
+        if (!$column_exists) {
+            mysqli_query($conn, "ALTER TABLE `fees` ADD COLUMN $definition");
+        }
+    }
+
+    foreach (['unique_fees_order_id' => 'order_id', 'unique_fees_payment_id' => 'payment_id'] as $index => $column) {
+        $index_check = mysqli_prepare($conn, "
+            SELECT 1 FROM information_schema.STATISTICS
+            WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'fees' AND INDEX_NAME = ?
+        ");
+        mysqli_stmt_bind_param($index_check, 's', $index);
+        mysqli_stmt_execute($index_check);
+        $index_exists = mysqli_stmt_get_result($index_check)->num_rows > 0;
+        mysqli_stmt_close($index_check);
+        if (!$index_exists) {
+            mysqli_query($conn, "ALTER TABLE `fees` ADD UNIQUE KEY `$index` (`$column`)");
+        }
     }
 }
 
@@ -102,6 +176,18 @@ if ($attendance_table_check && mysqli_num_rows($attendance_table_check) == 0) {
     if ($attendance_status_check && mysqli_num_rows($attendance_status_check) > 0) {
         $status_field = mysqli_fetch_assoc($attendance_status_check);
         if (stripos($status_field['Type'], 'presence') !== false || stripos($status_field['Type'], 'absence') !== false) {
+            mysqli_query($conn, "
+                ALTER TABLE `attendance`
+                MODIFY `status` ENUM('present','absent','presence','absence') NOT NULL
+            ");
+            mysqli_query($conn, "
+                UPDATE `attendance`
+                SET `status` = CASE `status`
+                    WHEN 'presence' THEN 'present'
+                    WHEN 'absence' THEN 'absent'
+                    ELSE `status`
+                END
+            ");
             mysqli_query($conn, "ALTER TABLE `attendance` MODIFY `status` ENUM('present','absent') NOT NULL");
         }
     }
@@ -142,63 +228,10 @@ if ($results_table_check && mysqli_num_rows($results_table_check) == 0) {
 // Ensure UNIQUE constraint on attendance table to prevent duplicate records
 $attendance_unique_check = mysqli_query($conn, "SHOW INDEX FROM `attendance` WHERE Key_name = 'unique_student_batch_date'");
 if ($attendance_unique_check && mysqli_num_rows($attendance_unique_check) == 0) {
-    // Delete duplicate attendance rows keeping the latest id
-    @mysqli_query($conn, "DELETE a1 FROM attendance a1 INNER JOIN attendance a2 WHERE a1.id < a2.id AND a1.student_id = a2.student_id AND a1.batch_id = a2.batch_id AND a1.date = a2.date");
-    @mysqli_query($conn, "ALTER TABLE `attendance` ADD UNIQUE KEY `unique_student_batch_date` (`student_id`, `batch_id`, `date`)");
-}
-
-// Ensure batch table columns (name & batch_name) are synchronized and compatible across schemas
-$batch_table_check = mysqli_query($conn, "SHOW TABLES LIKE 'batch'");
-if ($batch_table_check && mysqli_num_rows($batch_table_check) > 0) {
-    $has_name = mysqli_num_rows(mysqli_query($conn, "SHOW COLUMNS FROM `batch` LIKE 'name'")) > 0;
-    $has_batch_name = mysqli_num_rows(mysqli_query($conn, "SHOW COLUMNS FROM `batch` LIKE 'batch_name'")) > 0;
-
-    if (!$has_name && $has_batch_name) {
-        @mysqli_query($conn, "ALTER TABLE `batch` ADD COLUMN `name` VARCHAR(100) NULL AFTER `course_id`");
-        @mysqli_query($conn, "UPDATE `batch` SET `name` = `batch_name` WHERE `name` IS NULL OR `name` = ''");
-    } elseif ($has_name && !$has_batch_name) {
-        @mysqli_query($conn, "ALTER TABLE `batch` ADD COLUMN `batch_name` VARCHAR(100) NULL AFTER `name`");
-        @mysqli_query($conn, "UPDATE `batch` SET `batch_name` = `name` WHERE `batch_name` IS NULL OR `batch_name` = ''");
-    }
-
-    $has_timing = mysqli_num_rows(mysqli_query($conn, "SHOW COLUMNS FROM `batch` LIKE 'timing_status'")) > 0;
-    if (!$has_timing) {
-        @mysqli_query($conn, "ALTER TABLE `batch` ADD COLUMN `timing_status` TIME NULL");
-    }
-
-    $has_schedule = mysqli_num_rows(mysqli_query($conn, "SHOW COLUMNS FROM `batch` LIKE 'schedule'")) > 0;
-    if (!$has_schedule) {
-        @mysqli_query($conn, "ALTER TABLE `batch` ADD COLUMN `schedule` VARCHAR(255) NULL");
-    }
-}
-
-// Ensure teacher table has joining_date compatible with older databases having 'joining'
-$teacher_table_check = mysqli_query($conn, "SHOW TABLES LIKE 'teacher'");
-if ($teacher_table_check && mysqli_num_rows($teacher_table_check) > 0) {
-    $has_joining_date = mysqli_num_rows(mysqli_query($conn, "SHOW COLUMNS FROM `teacher` LIKE 'joining_date'")) > 0;
-    $has_joining = mysqli_num_rows(mysqli_query($conn, "SHOW COLUMNS FROM `teacher` LIKE 'joining'")) > 0;
-
-    if (!$has_joining_date && $has_joining) {
-        @mysqli_query($conn, "ALTER TABLE `teacher` ADD COLUMN `joining_date` DATE NULL AFTER `subject`");
-        @mysqli_query($conn, "UPDATE `teacher` SET `joining_date` = `joining` WHERE `joining_date` IS NULL");
-    } elseif ($has_joining_date && !$has_joining) {
-        @mysqli_query($conn, "ALTER TABLE `teacher` ADD COLUMN `joining` DATE NULL AFTER `subject`");
-        @mysqli_query($conn, "UPDATE `teacher` SET `joining` = `joining_date` WHERE `joining` IS NULL");
-    }
-}
-
-// Ensure course table has course_name
-$course_table_check = mysqli_query($conn, "SHOW TABLES LIKE 'course'");
-if ($course_table_check && mysqli_num_rows($course_table_check) > 0) {
-    $has_course_name = mysqli_num_rows(mysqli_query($conn, "SHOW COLUMNS FROM `course` LIKE 'course_name'")) > 0;
-    $has_c_name = mysqli_num_rows(mysqli_query($conn, "SHOW COLUMNS FROM `course` LIKE 'name'")) > 0;
-
-    if (!$has_course_name && $has_c_name) {
-        @mysqli_query($conn, "ALTER TABLE `course` ADD COLUMN `course_name` VARCHAR(100) NULL AFTER `institute_id`");
-        @mysqli_query($conn, "UPDATE `course` SET `course_name` = `name` WHERE `course_name` IS NULL");
-    } elseif ($has_course_name && !$has_c_name) {
-        @mysqli_query($conn, "ALTER TABLE `course` ADD COLUMN `name` VARCHAR(100) NULL AFTER `course_name`");
-        @mysqli_query($conn, "UPDATE `course` SET `name` = `course_name` WHERE `name` IS NULL");
+    try {
+        mysqli_query($conn, "ALTER TABLE `attendance` ADD UNIQUE KEY `unique_student_batch_date` (`student_id`, `batch_id`, `date`)");
+    } catch (mysqli_sql_exception $exception) {
+        error_log('Could not add attendance uniqueness constraint: ' . $exception->getMessage());
     }
 }
 

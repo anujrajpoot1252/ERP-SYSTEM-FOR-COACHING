@@ -65,27 +65,28 @@ if ($student_id > 0) {
                         <span>Results</span>
                     </a>
                 </li>
+                <li>
+                    <a href="marksheet.php">
+                        <i class="fa-solid fa-file-invoice"></i>
+                        <span>Marksheet</span>
+                    </a>
+                </li>
             <li>
-                <a href="marksheet.php">
-                <i class="fa-solid fa-file-invoice"></i>
-                <span>Marksheet</span></a>
+                <a href="attendance.php">
+                    <i class="fa-solid fa-calendar-check"></i>
+                    <span>Attendance</span>
+                </a>
             </li>
-                <li>
-                    <a href="attendance.php">
-                        <i class="fa-solid fa-calendar-check"></i>
-                        <span>Attendance</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="fees.php">
-                        <i class="fa-solid fa-credit-card"></i>
-                        <span>Fees</span>
-                    </a>
-                </li>
+            <li>
+                <a href="fees.php">
+                    <i class="fa-solid fa-money-bill"></i>
+                    <span>Fees</span>
+                </a>
+            </li>
             </ul>
 
             <div class="sidebar-footer">
-                <a href="../logout.php">
+                <a href="<?= htmlspecialchars(app_url('logout.php')) ?>">
                     <i class="fa-solid fa-right-from-bracket"></i>
                     <span>Logout</span>
                 </a>

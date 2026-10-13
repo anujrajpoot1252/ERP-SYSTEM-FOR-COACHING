@@ -4,23 +4,36 @@ require_once __DIR__ . "/../includes/auth_check.php";
 
 check_access(['teacher']);
 
-// Fetch Students Fee Details
-$students_query = mysqli_query($conn, "
-    SELECT 
-        s.id as student_id,
-        s.admission_no,
-        u.name as student_name,
-        b.name as batch_name,
-        COALESCE(c.fees, 0) as total_course_fee,
-        COALESCE(SUM(f.amount), 0) as paid_amount
+$user_id = (int) ($_SESSION['user_id'] ?? 0);
+$institute_id = (int) ($_SESSION['institute_id'] ?? 0);
+$teacher_stmt = mysqli_prepare($conn, "
+    SELECT id FROM teacher
+    WHERE user_id = ? AND institute_id = ? AND status = 'active'
+    LIMIT 1
+");
+mysqli_stmt_bind_param($teacher_stmt, 'ii', $user_id, $institute_id);
+mysqli_stmt_execute($teacher_stmt);
+$teacher = mysqli_fetch_assoc(mysqli_stmt_get_result($teacher_stmt));
+mysqli_stmt_close($teacher_stmt);
+$teacher_id = (int) ($teacher['id'] ?? 0);
+$students_stmt = mysqli_prepare($conn, "
+    SELECT s.id AS student_id, s.admission_no, u.name AS student_name, b.name AS batch_name,
+           COALESCE(c.fees, 0) AS total_course_fee,
+           COALESCE((
+               SELECT SUM(f.amount) FROM fees f
+               WHERE f.student_id = s.id AND f.status = 'paid'
+                   AND (f.course_id = s.course_id OR f.course_id IS NULL)
+           ), 0) AS paid_amount
     FROM student s
-    JOIN users u ON s.user_id = u.id
-    LEFT JOIN course c ON s.course_id = c.id
-    LEFT JOIN batch b ON s.batch_id = b.id
-    LEFT JOIN fees f ON f.student_id = s.id
-    GROUP BY s.id
+    INNER JOIN users u ON u.id = s.user_id AND u.role = 'student' AND u.status = 'active'
+    INNER JOIN batch b ON b.id = s.batch_id AND b.institute_id = s.institute_id AND b.teacher_id = ?
+    LEFT JOIN course c ON c.id = s.course_id AND c.institute_id = s.institute_id
+    WHERE s.institute_id = ? AND s.status = 'active'
     ORDER BY s.id DESC
 ");
+mysqli_stmt_bind_param($students_stmt, 'ii', $teacher_id, $institute_id);
+mysqli_stmt_execute($students_stmt);
+$students_query = mysqli_stmt_get_result($students_stmt);
 
 $students = [];
 $total_students = 0;

@@ -1,65 +1,53 @@
 <?php
-header("Content-Type: application/json");
-include("../../config/db.php");
+header('Content-Type: application/json');
+require_once __DIR__ . '/../../config/db.php';
+require_once __DIR__ . '/../../includes/auth_check.php';
 
-$email = $_POST['email'] ?? '';
-$password = $_POST['password'] ?? '';
-
-if ($email == '' || $password == '') {
-    echo json_encode([
-        "status" => false,
-        "message" => "Email and password are required"
-    ]);
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo json_encode(['status' => false, 'message' => 'Method not allowed.']);
     exit;
 }
 
-$stmt = $conn->prepare(
-    "SELECT id, name, email, password, role, institute_id, status
-     FROM users
-     WHERE email = ?
-     LIMIT 1"
-);
-
-$stmt->bind_param("s", $email);
-$stmt->execute();
-
-$result = $stmt->get_result();
-
-if ($result->num_rows == 1) {
-
-    $user = $result->fetch_assoc();
-
-    if ($user['status'] != 'active') {
-        echo json_encode([
-            "status" => false,
-            "message" => "Account is inactive"
-        ]);
-        exit;
-    }
-
-    if (password_verify($password, $user['password'])) {
-
-        unset($user['password']);
-
-        echo json_encode([
-            "status" => true,
-            "message" => "Login Success",
-            "user" => $user
-        ]);
-
-    } else {
-
-        echo json_encode([
-            "status" => false,
-            "message" => "Invalid Email or Password"
-        ]);
-    }
-
-} else {
-
-    echo json_encode([
-        "status" => false,
-        "message" => "Invalid Email or Password"
-    ]);
+$input = json_decode(file_get_contents('php://input'), true);
+if (!is_array($input)) {
+    $input = $_POST;
 }
-?>
+$email = is_string($input['email'] ?? null) ? trim($input['email']) : '';
+$password = is_string($input['password'] ?? null) ? $input['password'] : '';
+if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 255 || $password === '') {
+    http_response_code(400);
+    echo json_encode(['status' => false, 'message' => 'Email and password are required.']);
+    exit;
+}
+
+$stmt = mysqli_prepare($conn, "
+    SELECT id, name, email, password, role, institute_id, status
+    FROM users WHERE email = ? LIMIT 1
+");
+mysqli_stmt_bind_param($stmt, 's', $email);
+mysqli_stmt_execute($stmt);
+$user = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+mysqli_stmt_close($stmt);
+
+if (!$user || $user['status'] !== 'active' || !password_verify($password, $user['password'])) {
+    http_response_code(401);
+    echo json_encode(['status' => false, 'message' => 'Invalid email or password.']);
+    exit;
+}
+
+session_regenerate_id(true);
+unset($_SESSION['csrf_token']);
+$_SESSION['user_id'] = (int) $user['id'];
+$_SESSION['name'] = $user['name'];
+$_SESSION['email'] = $user['email'];
+$_SESSION['role'] = $user['role'];
+$_SESSION['institute_id'] = (int) $user['institute_id'];
+unset($user['password']);
+
+echo json_encode([
+    'status' => true,
+    'message' => 'Login successful.',
+    'user' => $user,
+    'csrf_token' => request_csrf_token()
+]);

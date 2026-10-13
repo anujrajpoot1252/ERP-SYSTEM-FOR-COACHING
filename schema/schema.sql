@@ -40,7 +40,7 @@ CREATE TABLE `users` (
 
 -- Seed Default Users (Passwords: admin123, teacher123, student123)
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `role`, `institute_id`, `status`) VALUES
-(1, 'Super Admin', 'admin@erp.com', '$2y$10$CcK51ZFvdF1vOIJLiLQBYOlB3PpU8xldxJiGBeaHqYNL0pCGtbcwC', 'admin', 1, 'active'),
+(1, 'Super Admin', 'admin@erp.com', '$2y$10$CcK51ZFvdF1vOIJLiLQBYOlB3PpU8xldxJiGBeaHqYNL0pCGtbcwC', 'superadmin', 1, 'active'),
 (2, 'Rahul Sharma', 'teacher@erp.com', '$2y$10$8Vb1aUYzKg2BvvDyLdiME.4NgPFvLjMFOydHhRON9AfpjVVTrZLoS', 'teacher', 1, 'active'),
 (3, 'Aman Verma', 'student@erp.com', '$2y$10$KnOsVc3mSylyro0u8GFmG.dfUNqAnUskwrShVeYYj5YQuMwSkoAcu', 'student', 1, 'active');
 
@@ -132,6 +132,7 @@ CREATE TABLE `attendance` (
   `status` ENUM('present','absent') NOT NULL,
   `phone_number_parents` VARCHAR(50) NULL,
   `marking` VARCHAR(20) NULL,
+  UNIQUE KEY `unique_student_batch_date` (`student_id`, `batch_id`, `date`),
   FOREIGN KEY (`student_id`) REFERENCES `student`(`id`) ON DELETE CASCADE,
   FOREIGN KEY (`batch_id`) REFERENCES `batch`(`id`) ON DELETE CASCADE,
   UNIQUE KEY `unique_student_batch_date` (`student_id`, `batch_id`, `date`)
@@ -141,10 +142,21 @@ CREATE TABLE `attendance` (
 CREATE TABLE `fees` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
   `student_id` INT NOT NULL,
+  `course_id` INT NULL,
   `amount` DECIMAL(10,2) NOT NULL,
+  `cashback` DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+  `payment_mode` VARCHAR(50) NOT NULL DEFAULT 'Cash',
+  `ref_no` VARCHAR(100) NULL,
+  `remarks` VARCHAR(255) NULL,
+  `status` ENUM('created','paid','failed') NOT NULL DEFAULT 'paid',
+  `order_id` VARCHAR(100) NULL,
+  `payment_id` VARCHAR(100) NULL,
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   INDEX `idx_fees_student_id` (`student_id`),
-  FOREIGN KEY (`student_id`) REFERENCES `student`(`id`) ON DELETE CASCADE
+  UNIQUE KEY `unique_fees_order_id` (`order_id`),
+  UNIQUE KEY `unique_fees_payment_id` (`payment_id`),
+  FOREIGN KEY (`student_id`) REFERENCES `student`(`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`course_id`) REFERENCES `course`(`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 9. Exams Table
@@ -172,4 +184,3 @@ CREATE TABLE IF NOT EXISTS `results` (
   FOREIGN KEY (`exam_id`) REFERENCES `exams`(`exam_id`) ON DELETE CASCADE,
   FOREIGN KEY (`student_id`) REFERENCES `student`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-

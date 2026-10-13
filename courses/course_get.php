@@ -1,13 +1,27 @@
 <?php
-require "../config/db.php";
+header('Content-Type: application/json');
+require_once __DIR__ . '/../config/db.php';
+require_once __DIR__ . '/../includes/auth_check.php';
 
-$result = mysqli_query($conn, "SELECT id, course_name FROM course");
+api_require_access(['admin', 'superadmin', 'teacher']);
+$role = $_SESSION['role'] ?? '';
+if ($role === 'superadmin') {
+    $result = mysqli_query($conn, "
+        SELECT id, course_name FROM course WHERE status = 'active' ORDER BY id DESC
+    ");
+} else {
+    $institute_id = (int) ($_SESSION['institute_id'] ?? 0);
+    $stmt = mysqli_prepare($conn, "
+        SELECT id, course_name FROM course
+        WHERE institute_id = ? AND status = 'active' ORDER BY id DESC
+    ");
+    mysqli_stmt_bind_param($stmt, 'i', $institute_id);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+}
 
 $data = [];
-
 while ($row = mysqli_fetch_assoc($result)) {
     $data[] = $row;
 }
-
-header("Content-Type: application/json");
 echo json_encode($data);

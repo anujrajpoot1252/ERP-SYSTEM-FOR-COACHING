@@ -4,52 +4,102 @@ require_once __DIR__ . "/../includes/auth_check.php";
 
 check_access(['teacher']);
 
-$message = "";
-$error = "";
+$user_id = (int) ($_SESSION['user_id'] ?? 0);
+$institute_id = (int) ($_SESSION['institute_id'] ?? 0);
+$csrf_token = request_csrf_token();
+$message = $error = '';
+$selected_student_id = filter_input(INPUT_GET, 'student_id', FILTER_VALIDATE_INT)
+    ?: (filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT) ?: 0);
+$teacher_stmt = mysqli_prepare($conn, "
+    SELECT id FROM teacher
+    WHERE user_id = ? AND institute_id = ? AND status = 'active'
+    LIMIT 1
+");
+mysqli_stmt_bind_param($teacher_stmt, 'ii', $user_id, $institute_id);
+mysqli_stmt_execute($teacher_stmt);
+$teacher = mysqli_fetch_assoc(mysqli_stmt_get_result($teacher_stmt));
+mysqli_stmt_close($teacher_stmt);
+$teacher_id = (int) ($teacher['id'] ?? 0);
 
-$selected_student_id = intval($_GET['student_id'] ?? $_GET['id'] ?? 0);
-
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $student_id   = intval($_POST['student_id'] ?? 0);
-    $amount       = floatval($_POST['amount'] ?? 0);
-    $payment_mode = sanitize($conn, $_POST['mode'] ?? 'Cash');
-    $ref_no       = sanitize($conn, $_POST['ref_no'] ?? '');
-    $remarks      = sanitize($conn, $_POST['remarks'] ?? '');
-
-    if ($student_id <= 0 || $amount <= 0) {
-        $error = "Please select a valid student and enter a valid amount.";
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $selected_student_id = filter_input(INPUT_POST, 'student_id', FILTER_VALIDATE_INT) ?: 0;
+    $amount_input = is_string($_POST['amount'] ?? null) ? trim($_POST['amount']) : '';
+    $payment_mode = is_string($_POST['mode'] ?? null) ? $_POST['mode'] : '';
+    $ref_no = is_string($_POST['ref_no'] ?? null) ? trim($_POST['ref_no']) : '';
+    $remarks = is_string($_POST['remarks'] ?? null) ? trim($_POST['remarks']) : '';
+    if (!validate_csrf_token($_POST['csrf_token'] ?? null)) {
+        $error = 'Your form session expired. Please reload the page and try again.';
+    } elseif ($selected_student_id < 1 || !preg_match('/^\d{1,8}(?:\.\d{1,2})?$/', $amount_input) ||
+        (float) $amount_input <= 0 || !in_array($payment_mode, ['UPI', 'Cash', 'Bank'], true) ||
+        strlen($ref_no) > 100 || strlen($remarks) > 255) {
+        $error = 'Enter a valid student, amount, payment method, and reference.';
     } else {
-        $stmt = $conn->prepare("INSERT INTO fees (student_id, amount, payment_mode, ref_no, remarks, created_at) VALUES (?, ?, ?, ?, ?, NOW())");
-        if ($stmt) {
-            $stmt->bind_param("idsss", $student_id, $amount, $payment_mode, $ref_no, $remarks);
-            if ($stmt->execute()) {
-                $message = "Payment of ₹" . number_format($amount, 2) . " successfully recorded!";
-                $selected_student_id = $student_id;
-            } else {
-                $error = "Failed to record payment: " . $stmt->error;
+        try {
+            mysqli_begin_transaction($conn);
+            $stmt = mysqli_prepare($conn, "
+                SELECT s.course_id, c.fees AS course_fee,
+                       COALESCE((
+                           SELECT SUM(f.amount) FROM fees f
+                           WHERE f.student_id = s.id AND f.status = 'paid'
+                               AND (f.course_id = s.course_id OR f.course_id IS NULL)
+                       ), 0) AS paid_amount
+                FROM student s
+                INNER JOIN batch b ON b.id = s.batch_id AND b.teacher_id = ? AND b.institute_id = s.institute_id
+                INNER JOIN users u ON u.id = s.user_id AND u.role = 'student'
+                LEFT JOIN course c ON c.id = s.course_id AND c.institute_id = s.institute_id
+                WHERE s.id = ? AND s.institute_id = ? AND s.status = 'active' AND u.status = 'active'
+                FOR UPDATE
+            ");
+            mysqli_stmt_bind_param($stmt, 'iii', $teacher_id, $selected_student_id, $institute_id);
+            mysqli_stmt_execute($stmt);
+            $student_payment = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+            mysqli_stmt_close($stmt);
+            if (!$student_payment || $student_payment['course_fee'] === null) {
+                throw new RuntimeException('Student is not in one of your batches or has no assigned course.');
             }
-            $stmt->close();
+            $due = max(0, (float) $student_payment['course_fee'] - (float) $student_payment['paid_amount']);
+            $amount = (float) $amount_input;
+            if ($amount > $due) {
+                throw new RuntimeException('Payment amount cannot exceed the outstanding course fee.');
+            }
+            $stmt = mysqli_prepare($conn, "
+                INSERT INTO fees (student_id, course_id, amount, status, payment_mode, ref_no, remarks)
+                VALUES (?, ?, ?, 'paid', ?, NULLIF(?, ''), NULLIF(?, ''))
+            ");
+            mysqli_stmt_bind_param($stmt, 'iidsss', $selected_student_id, $student_payment['course_id'],
+                $amount, $payment_mode, $ref_no, $remarks);
+            mysqli_stmt_execute($stmt);
+            mysqli_stmt_close($stmt);
+            mysqli_commit($conn);
+            $message = 'Payment of ₹' . number_format($amount, 2) . ' recorded successfully.';
+            $csrf_token = $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        } catch (Throwable $exception) {
+            mysqli_rollback($conn);
+            $error = $exception instanceof RuntimeException
+                ? $exception->getMessage()
+                : 'The payment could not be recorded.';
         }
     }
 }
 
-// Fetch all students for dropdown
-$students_res = mysqli_query($conn, "
-    SELECT 
-        s.id as student_id,
-        s.admission_no,
-        u.name as student_name,
-        b.name as batch_name,
-        COALESCE(c.fees, 0) as total_course_fee,
-        COALESCE(SUM(f.amount), 0) as paid_amount
+$students_stmt = mysqli_prepare($conn, "
+    SELECT s.id AS student_id, s.admission_no, u.name AS student_name, b.name AS batch_name,
+           COALESCE(c.fees, 0) AS total_course_fee,
+           COALESCE((
+               SELECT SUM(f.amount) FROM fees f
+               WHERE f.student_id = s.id AND f.status = 'paid'
+                   AND (f.course_id = s.course_id OR f.course_id IS NULL)
+           ), 0) AS paid_amount
     FROM student s
-    JOIN users u ON s.user_id = u.id
-    LEFT JOIN course c ON s.course_id = c.id
-    LEFT JOIN batch b ON s.batch_id = b.id
-    LEFT JOIN fees f ON f.student_id = s.id
-    GROUP BY s.id
+    INNER JOIN users u ON u.id = s.user_id AND u.role = 'student' AND u.status = 'active'
+    INNER JOIN batch b ON b.id = s.batch_id AND b.teacher_id = ? AND b.institute_id = s.institute_id
+    LEFT JOIN course c ON c.id = s.course_id AND c.institute_id = s.institute_id
+    WHERE s.institute_id = ? AND s.status = 'active'
     ORDER BY u.name ASC
 ");
+mysqli_stmt_bind_param($students_stmt, 'ii', $teacher_id, $institute_id);
+mysqli_stmt_execute($students_stmt);
+$students_res = mysqli_stmt_get_result($students_stmt);
 
 $students_list = [];
 $active_student = null;
@@ -125,7 +175,7 @@ if (!$active_student && count($students_list) > 0) {
                 </li>
             </ul>
             <div class="sidebar-footer">
-                <a href="../logout.php">
+                <a href="<?= htmlspecialchars(app_url('logout.php')) ?>">
                     <i class="fa-solid fa-right-from-bracket"></i>
                     <span>Logout</span>
                 </a>
@@ -142,6 +192,7 @@ if (!$active_student && count($students_list) > 0) {
                 <div class="user-profile">
                     <span class="role-pill">TEACHER</span>
                     <i class="fa-regular fa-circle-user profile-icon"></i>
+                    <strong><?= htmlspecialchars($_SESSION['name'] ?? 'Teacher') ?></strong>
                 </div>
             </header>
 
@@ -167,6 +218,7 @@ if (!$active_student && count($students_list) > 0) {
                         <?php endif; ?>
 
                         <form class="portal-form" method="POST" action="payment.php">
+                            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf_token) ?>">
                             <div class="field-group">
                                 <label>Student *</label>
                                 <select name="student_id" class="portal-input" required onchange="window.location.href='payment.php?student_id='+this.value">
@@ -200,7 +252,7 @@ if (!$active_student && count($students_list) > 0) {
                             <div class="field-row">
                                 <div class="field-group">
                                     <label>Amount (₹) *</label>
-                                    <input type="number" name="amount" class="portal-input" placeholder="e.g. 5000" min="1" step="0.01" required value="<?= $active_student ? $active_student['due'] : '' ?>">
+                                    <input type="number" name="amount" class="portal-input" placeholder="e.g. 5000" min="0.01" max="<?= htmlspecialchars(number_format($active_student['due'] ?? 0, 2, '.', '')) ?>" step="0.01" required value="<?= $active_student ? htmlspecialchars(number_format($active_student['due'], 2, '.', '')) : '' ?>">
                                 </div>
                                 <div class="field-group">
                                     <label>Transaction / Ref No.</label>

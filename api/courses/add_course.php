@@ -1,11 +1,14 @@
 <?php
 header("Content-Type: application/json");
-include("../../config/db.php");
+require_once __DIR__ . "/../../config/db.php";
+require_once __DIR__ . "/../../includes/auth_check.php";
+
+api_require_access(['admin']);
+api_require_csrf();
 
 $course_name = trim($_POST['course_name'] ?? '');
 $duration = trim($_POST['duration'] ?? '');
 $fees = trim($_POST['fees'] ?? $_POST['fee'] ?? '');
-$institute_id_input = trim($_POST['institute_id'] ?? '');
 $status = trim($_POST['status'] ?? 'active');
 
 if ($course_name === '' || $duration === '' || $fees === '') {
@@ -40,12 +43,10 @@ if (!in_array($status, ['active', 'inactive'], true)) {
 	exit;
 }
 
-$institute_id = $institute_id_input === '' ? 1 : filter_var($institute_id_input, FILTER_VALIDATE_INT);
-if ($institute_id === false || $institute_id < 1) {
-	echo json_encode([
-		"status" => false,
-		"message" => "institute_id must be a positive integer"
-	]);
+$institute_id = (int) ($_SESSION['institute_id'] ?? 0);
+if ($institute_id < 1) {
+	http_response_code(403);
+	echo json_encode(["status" => false, "message" => "A valid institute account is required."]);
 	exit;
 }
 

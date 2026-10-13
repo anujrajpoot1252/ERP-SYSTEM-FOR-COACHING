@@ -22,6 +22,10 @@ if ($user_id > 0) {
         INNER JOIN users u
             ON t.user_id = u.id
         WHERE t.user_id = ?
+            AND t.institute_id = ?
+            AND t.status = 'active'
+            AND u.status = 'active'
+            AND u.role = 'teacher'
         LIMIT 1
     ";
 
@@ -29,11 +33,8 @@ if ($user_id > 0) {
 
     if ($teacherStmt) {
 
-        mysqli_stmt_bind_param(
-            $teacherStmt,
-            "i",
-            $user_id
-        );
+        $institute_id = (int) ($_SESSION['institute_id'] ?? 0);
+        mysqli_stmt_bind_param($teacherStmt, "ii", $user_id, $institute_id);
 
         mysqli_stmt_execute($teacherStmt);
 
@@ -60,7 +61,9 @@ if ($teacher_id > 0) {
         FROM batch b
         LEFT JOIN course c
             ON b.course_id = c.id
+            AND c.institute_id = b.institute_id
         WHERE b.teacher_id = ?
+            AND b.institute_id = ?
         ORDER BY b.name ASC
     ";
 
@@ -71,11 +74,8 @@ if ($teacher_id > 0) {
 
     if ($batchStmt) {
 
-        mysqli_stmt_bind_param(
-            $batchStmt,
-            "i",
-            $teacher_id
-        );
+        $institute_id = (int) ($_SESSION['institute_id'] ?? 0);
+        mysqli_stmt_bind_param($batchStmt, "ii", $teacher_id, $institute_id);
 
         mysqli_stmt_execute($batchStmt);
 

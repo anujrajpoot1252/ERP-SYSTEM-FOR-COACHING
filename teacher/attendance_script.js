@@ -6,10 +6,16 @@ const loadButton = document.querySelector(".filter-button button");
 
 const form = document.getElementById("attendance-form");
 const studentList = document.querySelector(".student-list");
+const csrfToken = form.querySelector('input[name="csrf_token"]').value;
 
 const presentCount = document.getElementById("present-count");
 const absentCount = document.getElementById("absent-count");
 
+function escapeHtml(value) {
+    const element = document.createElement("span");
+    element.textContent = String(value ?? "");
+    return element.innerHTML;
+}
 
 const today = new Date();
 
@@ -80,7 +86,7 @@ function createStudent(student) {
             </span>
 
             <strong>
-                #${student.id}
+                #${escapeHtml(student.roll_no || student.id)}
             </strong>
 
         </div>
@@ -93,7 +99,7 @@ function createStudent(student) {
             </span>
 
             <strong>
-                ${student.name}
+                ${escapeHtml(student.name)}
             </strong>
 
         </div>
@@ -274,7 +280,7 @@ async function loadStudents() {
                 color:red;
             ">
 
-        ${error.message}
+        ${escapeHtml(error.message)}
 
     </div>
 
@@ -358,6 +364,10 @@ async function saveAttendance() {
 
     });
 
+    if (attendance.length !== students.length) {
+        alert("Select present or absent for every student before saving.");
+        return;
+    }
 
     try {
 
@@ -368,7 +378,8 @@ async function saveAttendance() {
                 method: "POST",
 
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "X-CSRF-Token": csrfToken
                 },
 
                 body: JSON.stringify({
@@ -379,7 +390,9 @@ async function saveAttendance() {
                     date: date,
 
                     attendance:
-                        attendance
+                        attendance,
+
+                    csrf_token: csrfToken
 
                 })
 
@@ -437,4 +450,3 @@ form.addEventListener(
 
 
 updateSummary();
-

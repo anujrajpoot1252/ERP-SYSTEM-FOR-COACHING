@@ -1,21 +1,24 @@
 <?php
 header("Content-Type: application/json");
-include("../../config/db.php");
+require_once __DIR__ . "/../../config/db.php";
+require_once __DIR__ . "/../../includes/auth_check.php";
 
-$result = mysqli_query(
-    $conn,
-    "SELECT id, institute_id, course_name, duration, fees, status
-     FROM course
-     ORDER BY id DESC"
-);
+api_require_access(['admin', 'superadmin', 'teacher', 'student']);
 
-if (!$result) {
-    echo json_encode([
-        "status" => false,
-        "message" => "Failed to fetch courses",
-        "error" => mysqli_error($conn)
-    ]);
-    exit;
+if (($_SESSION['role'] ?? '') === 'superadmin') {
+    $result = mysqli_query($conn, "
+        SELECT id, institute_id, course_name, duration, fees, status
+        FROM course ORDER BY id DESC
+    ");
+} else {
+    $institute_id = (int) ($_SESSION['institute_id'] ?? 0);
+    $stmt = mysqli_prepare($conn, "
+        SELECT id, institute_id, course_name, duration, fees, status
+        FROM course WHERE institute_id = ? ORDER BY id DESC
+    ");
+    mysqli_stmt_bind_param($stmt, 'i', $institute_id);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
 }
 
 $data = [];

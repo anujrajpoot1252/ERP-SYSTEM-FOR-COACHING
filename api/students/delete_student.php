@@ -1,8 +1,13 @@
 <?php
 header("Content-Type: application/json");
-include("../../config/db.php");
+require_once __DIR__ . "/../../config/db.php";
+require_once __DIR__ . "/../../includes/auth_check.php";
+
+api_require_access(['admin']);
+api_require_csrf();
 
 $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+$institute_id = (int) ($_SESSION['institute_id'] ?? 0);
 
 if (!$id) {
 	echo json_encode([
@@ -12,7 +17,11 @@ if (!$id) {
 	exit;
 }
 
-$stmt = $conn->prepare("DELETE FROM student WHERE id = ?");
+$stmt = $conn->prepare("
+	DELETE u FROM users u
+	INNER JOIN student s ON s.user_id = u.id
+	WHERE s.id = ? AND s.institute_id = ? AND u.role = 'student'
+");
 
 if (!$stmt) {
 	echo json_encode([
@@ -23,7 +32,7 @@ if (!$stmt) {
 	exit;
 }
 
-$stmt->bind_param("i", $id);
+$stmt->bind_param("ii", $id, $institute_id);
 
 if (!$stmt->execute()) {
 	echo json_encode([

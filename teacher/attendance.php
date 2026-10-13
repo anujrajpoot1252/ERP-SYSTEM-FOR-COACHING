@@ -3,8 +3,19 @@ require_once __DIR__ . "/../config/db.php";
 require_once __DIR__ . "/../includes/auth_check.php";
 check_access(['teacher']);
 
-$batches_res = mysqli_query($conn, "SELECT id, name FROM batch ORDER BY id ASC");
-$selected_batch = intval($_GET['batch_id'] ?? 0);
+$user_id = (int) ($_SESSION['user_id'] ?? 0);
+$institute_id = (int) ($_SESSION['institute_id'] ?? 0);
+$batches_stmt = mysqli_prepare($conn, "
+    SELECT b.id, b.name FROM batch b
+    INNER JOIN teacher t ON t.id = b.teacher_id AND t.institute_id = b.institute_id
+    WHERE t.user_id = ? AND t.institute_id = ? AND t.status = 'active'
+    ORDER BY b.id ASC
+");
+mysqli_stmt_bind_param($batches_stmt, 'ii', $user_id, $institute_id);
+mysqli_stmt_execute($batches_stmt);
+$batches_res = mysqli_stmt_get_result($batches_stmt);
+$selected_batch = filter_input(INPUT_GET, 'batch_id', FILTER_VALIDATE_INT) ?: 0;
+$csrf_token = request_csrf_token();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -138,6 +149,7 @@ $selected_batch = intval($_GET['batch_id'] ?? 0);
                     </div>
 
                     <form id="attendance-form">
+                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf_token) ?>">
                         <div class="student-list">
                         </div>
 

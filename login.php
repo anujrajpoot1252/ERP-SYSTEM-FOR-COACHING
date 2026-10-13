@@ -1,13 +1,15 @@
 <?php
 require_once __DIR__ . "/config/db.php";
+require_once __DIR__ . "/includes/auth_check.php";
 
 $error = "";
+$csrf_token = request_csrf_token();
 
 $base = defined('APP_PATH') ? APP_PATH : ((isset($_SERVER['SCRIPT_NAME']) && strpos($_SERVER['SCRIPT_NAME'], '/ERP-SYSTEM-FOR-COACHING') === 0) ? '/ERP-SYSTEM-FOR-COACHING' : '');
 
 // Redirect if already logged in
 if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) {
-    switch ($_SESSION['role']) {
+    switch ($_SESSION['role'] ?? '') {
         case 'admin':
         case 'superadmin':
             header("Location: $base/admin/dashboard.php");
@@ -18,27 +20,42 @@ if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) {
         case 'student':
             header("Location: $base/student/dashboard.php");
             exit;
+        default:
+            $_SESSION = [];
+            session_destroy();
+            header("Location: /ERP-SYSTEM-FOR-COACHING/login.php");
+            exit;
     }
 }
 
 // Handle Form Submission
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $email = sanitize($conn, $_POST['email'] ?? '');
-    $password = $_POST['password'] ?? '';
+    $email = is_string($_POST['email'] ?? null) ? trim($_POST['email']) : '';
+    $password = is_string($_POST['password'] ?? null) ? $_POST['password'] : '';
+    $submitted_csrf = is_string($_POST['csrf_token'] ?? null) ? $_POST['csrf_token'] : '';
 
-    if (empty($email) || empty($password)) {
+    if (!validate_csrf_token($submitted_csrf)) {
+        $error = "Your form session expired. Please reload the page and try again.";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL) || $password === '') {
         $error = "Please enter both Email and Password.";
     } else {
-        $sql = "SELECT * FROM users WHERE email = '$email' LIMIT 1";
-        $result = mysqli_query($conn, $sql);
+        $stmt = mysqli_prepare($conn, "
+            SELECT id, name, email, password, role, institute_id, status
+            FROM users WHERE email = ? LIMIT 1
+        ");
+        mysqli_stmt_bind_param($stmt, 's', $email);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
 
         if ($result && mysqli_num_rows($result) > 0) {
             $user = mysqli_fetch_assoc($result);
+            mysqli_stmt_close($stmt);
 
             if ($user['status'] !== 'active') {
-                $error = "Your account is inactive. Please contact admin.";
+                $error = "Invalid email or password.";
             } elseif (password_verify($password, $user['password'])) {
-                // Set Session Data
+                session_regenerate_id(true);
+                $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['name'] = $user['name'];
                 $_SESSION['email'] = $user['email'];
@@ -55,10 +72,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 }
                 exit;
             } else {
-                $error = "Incorrect Password. Please try again.";
+                $error = "Invalid email or password.";
             }
         } else {
-            $error = "No account found with this email address.";
+            mysqli_stmt_close($stmt);
+            $error = "Invalid email or password.";
         }
     }
 }
@@ -89,6 +107,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <?php endif; ?>
 
         <form method="POST" action="login.php">
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf_token) ?>">
             <div class="form-group">
                 <label>Email Address</label>
                 <div class="input-icon">

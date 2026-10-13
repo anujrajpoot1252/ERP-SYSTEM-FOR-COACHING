@@ -138,9 +138,30 @@ body {
     background-color: #4338ca;
 }
 
+.btn-danger {
+    padding: 6px 10px;
+    background-color: #dc2626;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-danger:hover {
+    background-color: #b91c1c;
+}
+
 .app-container {
     display: flex;
     min-height: 100vh;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
 }
 
 /* Sidebar */
@@ -331,6 +352,76 @@ body {
     align-items: center;
 }
 
+.dashboard-action {
+    padding: 7px 14px;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.table-scroll {
+    overflow-x: auto;
+}
+
+.muted,
+.field-help {
+    color: #64748b;
+    font-size: 12px;
+}
+
+.empty-state {
+    text-align: center !important;
+    color: #94a3b8;
+}
+
+.notice-success {
+    background: #dcfce7;
+    border-left: 4px solid #16a34a;
+    border-radius: 6px;
+    color: #15803d;
+    margin-bottom: 20px;
+    padding: 12px 16px;
+}
+
+.institute-form-card {
+    max-width: 900px;
+}
+
+.form-intro {
+    color: #64748b;
+    font-size: 14px;
+    margin: -8px 0 24px;
+}
+
+.institute-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 20px;
+}
+
+.institute-form-grid .form-group {
+    margin-bottom: 18px;
+}
+
+.institute-form-grid label {
+    color: #475569;
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.institute-form-grid .form-control-simple {
+    display: block;
+}
+
+.form-textarea {
+    resize: vertical;
+}
+
+.form-submit {
+    margin-top: 4px;
+}
+
 .data-table {
     width: 100%;
     border-collapse: collapse;
@@ -403,6 +494,10 @@ body {
 }
 
 @media (max-width: 768px) {
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
     .app-container {
         flex-direction: row;
     }
@@ -504,5 +599,22 @@ body {
 
     .data-table {
         min-width: 600px;
+    }
+
+    .institute-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .top-navbar {
+        gap: 12px;
+        padding: 16px;
+    }
+
+    .user-profile {
+        gap: 8px;
+    }
+
+    .page-body {
+        padding: 16px;
     }
 }
