@@ -96,7 +96,7 @@ In 2 files ke alawa baaki koi file change nahi ki gayi hai.
 }
 
 ## Project Update - 18 October 2026
-
+ {anuj rajpoot}
 - Aaj jin files mein errors the, unke errors resolve kar diye gaye hain.
 - `student/marksheet.php` ka marksheet page complete hai.
 
