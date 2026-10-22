@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coaching ERP - Complete Institute Management System</title>
+    <meta name="description" content="All-in-one ERP system for Coaching Centers and Institutes. Features Superadmin, Admin, Teacher and Student portals with attendance, exams, fees & Razorpay integration.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --primary-glow: rgba(99, 102, 241, 0.25);
+            --secondary: #0ea5e9;
+            --accent: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            
+            --bg-dark: #090d16;
+            --bg-card: #111827;
+            --bg-card-hover: #172033;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(99, 102, 241, 0.4);
+            
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-sub: #cbd5e1;
+            
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Subtle animated background grid & glows */
+        .ambient-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .glow-1 {
+            position: absolute;
+            top: -10%;
+            left: 20%;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.18) 0%, rgba(99, 102, 241, 0) 70%);
+            filter: blur(60px);
+        }
+        .glow-2 {
+            position: absolute;
+            top: 40%;
+            right: 5%;
+            width: 450px;
+            height: 450px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.15) 0%, rgba(14, 165, 233, 0) 70%);
+            filter: blur(60px);
+        }
+
+        /* Container */
+        .container {
+            width: 100%;
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Top Announcement Notice */
+        .top-notice {
+            background: linear-gradient(90deg, #312e81, #1e1b4b);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.3);
+            padding: 8px 16px;
+            font-size: 13px;
+            text-align: center;
+            color: #c7d2fe;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .top-notice a {
+            color: #38bdf8;
+            text-decoration: underline;
+            font-weight: 600;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(9, 13, 22, 0.82);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+        .nav-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 76px;
+        }
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 20px;
+            box-shadow: 0 4px 15px var(--primary-glow);
+        }
+        .brand-text h1 {
+            font-size: 19px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            line-height: 1.1;
+        }
+        .brand-text span {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--secondary);
+            font-weight: 600;
+        }
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            gap: 28px;
+        }
+        .nav-item a {
+            text-decoration: none;
+            color: var(--text-sub);
+            font-size: 14.5px;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-item a:hover {
+            color: #ffffff;
+        }
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid transparent;
+            white-space: nowrap;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #ffffff;
+            box-shadow: 0 4px 18px var(--primary-glow);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 22px rgba(99, 102, 241, 0.45);
+        }
+        .btn-outline {
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-main);
+            border-color: var(--border-color);
+        }
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+        }
+        .btn-github {
+            background: #24292e;
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+        .btn-github:hover {
+            background: #2f363d;
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        .btn-sm {
+            padding: 7px 14px;
+            font-size: 13px;
+            border-radius: 8px;
+        }
+
+        /* Hamburger for mobile */
+        .mobile-toggle {
+            display: none;
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            padding: 85px 0 60px;
+            text-align: center;
+            position: relative;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            border-radius: 50px;
+            background: rgba(99, 102, 241, 0.12);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: #a5b4fc;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+        .hero-badge .pulse-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #22c55e;
+            box-shadow: 0 0 10px #22c55e;
+        }
+        .hero-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(34px, 5.5vw, 62px);
+            font-weight: 700;
+            line-height: 1.15;
+            letter-spacing: -1.2px;
+            margin-bottom: 22px;
+            max-width: 950px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #ffffff 30%, #818cf8 70%, #38bdf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-desc {
+            font-size: clamp(16px, 2vw, 19px);
+            color: var(--text-muted);
+            max-width: 780px;
+            margin: 0 auto 38px;
+            line-height: 1.65;
+        }
+        .hero-cta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 50px;
+        }
+
+        /* Stats Row */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-top: 40px;
+        }
+        .stat-card {
+            background: rgba(17, 24, 39, 0.6);
+            border: 1px solid var(--border-color);
+            padding: 22px 18px;
+            border-radius: 16px;
+            backdrop-filter: blur(8px);
+            transition: var(--transition);
+        }
+        .stat-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--border-hover);
+        }
+        .stat-num {
+            font-size: 30px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 4px;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* Section Layouts */
+        .section {
+            padding: 80px 0;
+            position: relative;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .section-tag {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--secondary);
+            margin-bottom: 10px;
+            display: block;
+        }
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(26px, 3.5vw, 38px);
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 14px;
+        }
+        .section-sub {
+            color: var(--text-muted);
+            font-size: 16px;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        /* Portals Cards Grid */
+        .portal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 24px;
+        }
+        .portal-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 30px 24px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+        .portal-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--card-accent, var(--primary));
+            opacity: 0.8;
+            transition: var(--transition);
+        }
+        .portal-card:hover {
+            transform: translateY(-6px);
+            background: var(--bg-card-hover);
+            border-color: var(--card-accent, var(--primary-glow));
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        }
+        .portal-card:hover::before {
+            height: 6px;
+            opacity: 1;
+        }
+        .portal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .portal-icon {
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
+            background: var(--icon-bg, rgba(99, 102, 241, 0.15));
+            color: var(--card-accent, var(--primary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        .portal-tag {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-sub);
+            letter-spacing: 0.5px;
+        }
+        .portal-name {
+            font-size: 21px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+        .portal-desc {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 22px;
+            flex-grow: 1;
+            line-height: 1.6;
+        }
+        .portal-links {
+            list-style: none;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: 18px;
+            margin-bottom: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .portal-links li a {
+            text-decoration: none;
+            color: var(--text-sub);
+            font-size: 13.5px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: var(--transition);
+            padding: 4px 0;
+        }
+        .portal-links li a:hover {
+            color: #ffffff;
+            transform: translateX(4px);
+        }
+        .portal-links li a i {
+            font-size: 12px;
+            opacity: 0.6;
+        }
+
+        /* Color Variants for Role Cards */
+        .card-superadmin {
+            --card-accent: #a855f7;
+            --icon-bg: rgba(168, 85, 247, 0.15);
+        }
+        .card-admin {
+            --card-accent: #6366f1;
+            --icon-bg: rgba(99, 102, 241, 0.15);
+        }
+        .card-teacher {
+            --card-accent: #10b981;
+            --icon-bg: rgba(16, 185, 129, 0.15);
+        }
+        .card-student {
+            --card-accent: #f59e0b;
+            --icon-bg: rgba(245, 158, 11, 0.15);
+        }
+
+        /* Features Section */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+        .feature-box {
+            background: rgba(17, 24, 39, 0.5);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 26px;
+            transition: var(--transition);
+        }
+        .feature-box:hover {
+            background: rgba(17, 24, 39, 0.85);
+            border-color: var(--border-hover);
+            transform: translateY(-3px);
+        }
+        .feature-top {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+        .feature-icon-wrap {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(99, 102, 241, 0.12);
+            color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        .feature-box h4 {
+            font-size: 17px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+        .feature-box p {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* Interactive Master Links Directory */
+        .directory-wrap {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 34px;
+        }
+        .dir-search-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(9, 13, 22, 0.8);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 18px;
+            margin-bottom: 30px;
+        }
+        .dir-search-bar i {
+            color: var(--text-muted);
+            font-size: 16px;
+        }
+        .dir-search-bar input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #ffffff;
+            font-size: 15px;
+            width: 100%;
+        }
+        .dir-search-bar input::placeholder {
+            color: #64748b;
+        }
+        .directory-cols {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 30px;
+        }
+        .dir-group h5 {
+            font-size: 15px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .dir-group h5 i {
+            color: var(--primary-light);
+        }
+        .dir-items {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .dir-link {
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid transparent;
+            border-radius: 8px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: var(--text-sub);
+            font-size: 13.5px;
+            transition: var(--transition);
+        }
+        .dir-link:hover {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: rgba(99, 102, 241, 0.3);
+            color: #ffffff;
+            transform: translateX(3px);
+        }
+        .dir-link .badge-file {
+            font-size: 11px;
+            font-family: monospace;
+            background: rgba(255, 255, 255, 0.08);
+            color: #94a3b8;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        /* Demo Credentials Card */
+        .credentials-card {
+            background: linear-gradient(135deg, rgba(30, 27, 75, 0.5), rgba(17, 24, 39, 0.7));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 18px;
+            padding: 30px;
+            margin-top: 40px;
+        }
+        .cred-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .cred-header i {
+            font-size: 22px;
+            color: var(--warning);
+        }
+        .cred-header h4 {
+            font-size: 18px;
+            font-weight: 700;
+        }
+        .cred-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+        .cred-pill {
+            background: rgba(9, 13, 22, 0.7);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .cred-pill code {
+            color: #38bdf8;
+            font-size: 13px;
+        }
+        .cred-copy-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+        .cred-copy-btn:hover {
+            color: #ffffff;
+        }
+
+        /* Tech Stack Section */
+        .tech-pill-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 30px;
+        }
+        .tech-pill {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            padding: 8px 18px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-sub);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+        .tech-pill:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(99, 102, 241, 0.4);
+            color: #ffffff;
+        }
+
+        /* Footer */
+        .footer {
+            background: #060910;
+            border-top: 1px solid var(--border-color);
+            padding: 50px 0 30px;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .footer-brand p {
+            margin-top: 12px;
+            max-width: 380px;
+            line-height: 1.6;
+        }
+        .footer-links h5 {
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        .footer-links ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .footer-links ul li a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        .footer-links ul li a:hover {
+            color: #ffffff;
+        }
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        /* Mobile Menu */
+        @media (max-width: 900px) {
+            .nav-menu {
+                position: fixed;
+                top: 76px;
+                left: 0;
+                width: 100%;
+                background: #0f172a;
+                flex-direction: column;
+                padding: 24px;
+                gap: 18px;
+                border-bottom: 1px solid var(--border-color);
+                transform: translateY(-150%);
+                transition: transform 0.3s ease-in-out;
+            }
+            .nav-menu.active {
+                transform: translateY(0);
+            }
+            .mobile-toggle {
+                display: block;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 540px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .nav-actions .btn-github {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ambient Glowing Lights -->
+    <div class="ambient-glow">
+        <div class="glow-1"></div>
+        <div class="glow-2"></div>
+    </div>
+
+    <!-- Top Notice Banner -->
+    <div class="top-notice">
+        <span>🚀 <strong>Coaching ERP System</strong> is ready for deployment & multi-role testing!</span>
+        <span>•</span>
+        <a href="#credentials">View Demo Access Credentials &darr;</a>
+        <span>•</span>
+        <a href="https://github.com/anujrajpoot1252/ERP-SYSTEM-FOR-COACHING" target="_blank">Star on GitHub ⭐</a>
+    </div>
+
+    <!-- Navigation Header -->
+    <nav class="navbar">
+        <div class="container nav-wrapper">
+            <a href="index.html" class="brand-logo">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>EduCoach ERP</h1>
+                    <span>Management System</span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <ul class="nav-menu" id="navMenu">
+                <li class="nav-item"><a href="#hero"><i class="fa-solid fa-house"></i> Home</a></li>
+                <li class="nav-item"><a href="#portals"><i class="fa-solid fa-layer-group"></i> Portals</a></li>
+                <li class="nav-item"><a href="#features"><i class="fa-solid fa-wand-magic-sparkles"></i> Features</a></li>
+                <li class="nav-item"><a href="#directory"><i class="fa-solid fa-folder-tree"></i> All Links</a></li>
+                <li class="nav-item"><a href="#tech-stack"><i class="fa-solid fa-code"></i> Tech Stack</a></li>
+            </ul>
+
+            <!-- Nav Actions -->
+            <div class="nav-actions">
+                <a href="https://github.com/anujrajpoot1252/ERP-SYSTEM-FOR-COACHING.git" target="_blank" class="btn btn-github btn-sm">
+                    <i class="fa-brands fa-github"></i> <span>GitHub</span>
+                </a>
+                <a href="login.php" class="btn btn-primary btn-sm">
+                    <i class="fa-solid fa-right-to-bracket"></i> <span>Login Portal</span>
+                </a>
+                <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section" id="hero">
+        <div class="container">
+            <div class="hero-badge">
+                <span class="pulse-dot"></span>
+                <span>Production-Ready Multi-Tenant Coaching ERP</span>
+            </div>
+
+            <h1 class="hero-title">
+                Next-Gen Coaching & Institute <br>
+                <span class="gradient-text">Management System</span>
+            </h1>
+
+            <p class="hero-desc">
+                An all-inclusive, high-performance ERP tailored for institutes, academies, and coaching centers. 
+                Seamlessly govern Superadmin oversight, Admin operations, Teacher scheduling, and Student records with 
+                automated attendance, marksheet generation, and Razorpay online payments.
+            </p>
+
+            <div class="hero-cta">
+                <a href="login.php" class="btn btn-primary">
+                    <i class="fa-solid fa-arrow-right-to-bracket"></i> Launch Login Portal
+                </a>
+                <a href="#portals" class="btn btn-outline">
+                    <i class="fa-solid fa-table-cells-large"></i> Explore Role Portals
+                </a>
+                <a href="https://github.com/anujrajpoot1252/ERP-SYSTEM-FOR-COACHING" target="_blank" class="btn btn-github">
+                    <i class="fa-brands fa-github"></i> View GitHub Repo
+                </a>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-num">4 Roles</div>
+                    <div class="stat-label">Superadmin, Admin, Teacher, Student</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num">100%</div>
+                    <div class="stat-label">Schema-Backed & Safe SQL</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num">Razorpay</div>
+                    <div class="stat-label">Online Fee Collection & Webhooks</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num">Real-Time</div>
+                    <div class="stat-label">Smart Attendance & Marksheets</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Role Portals Grid -->
+    <section class="section" id="portals">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Role-Based Access</span>
+                <h2 class="section-title">Dedicated Portals for Every Role</h2>
+                <p class="section-sub">
+                    Direct access to specialized modules designed for administrators, teachers, and enrolled students.
+                </p>
+            </div>
+
+            <div class="portal-grid">
+                <!-- Super Admin Card -->
+                <div class="portal-card card-superadmin">
+                    <div class="portal-header">
+                        <div class="portal-icon">
+                            <i class="fa-solid fa-crown"></i>
+                        </div>
+                        <span class="portal-tag">System Root</span>
+                    </div>
+                    <h3 class="portal-name">Super Admin</h3>
+                    <p class="portal-desc">
+                        Full global visibility across multiple coaching institutes, subscription plans, system health, and master accounts.
+                    </p>
+                    <ul class="portal-links">
+                        <li><a href="superadmin/dashboard.php"><span>Superadmin Dashboard</span> <i class="fa-solid fa-chevron-right"></i></a></li>
+                        <li><a href="superadmin/institutes.php"><span>All Institutes</span> <i class="fa-solid fa-chevron-right"></i></a></li>
+                        <li><a href="superadmin/add_institute.php"><span>Add New Institute</span> <i class="fa-solid fa-chevron-right"></i></a></li>
+                        <li><a href="superadmin/subscriptions.php"><span>Subscriptions & Plans</span> <i class="fa-solid fa-chevron-right"></i></a></li>
+                    </ul>
+                    <a href="superadmin/dashboard.php" class="btn btn-outline btn-sm">
+                        <i class="fa-solid fa-shield-halved"></i> Access Superadmin
+                    </a>
+                </div>
+
+                <!-- Admin Card -->
+                <div class="portal-card card-admin">
+                    <div class="portal-header">
+                        <div class="portal-icon">
+                            <i class="fa-solid fa-building-columns"></i>
+                        </div>
+                        <span class="portal-tag">Branch Admin</span>
+                    </div>
+                    <h3 class="portal-name">Institute Admin</h3>
+                    <p class="portal-desc">
+                        Complete branch control: student admissions, teacher payroll and assignments, batch timing, and fee tracking.
+                    </p>
+                    <ul class="portal-links">
+                        <li><a href="admin/dashboard.php"><span>Admin Live Dashboard</span> <i class="fa-solid fa-chevron-right"></i></a></li>
+                        <li><a href="admin/students.php"><span>Student Admissions</span> <i class="fa-solid fa-chevron-right"></i></a></li>
+                        <li><a href="admin/teachers.php"><span>Faculty Management</span> <i class="fa-solid fa-chevron-right"></i></a></li>
+                        <li><a href="admin/batches.php"><span>Batches & Timetables</span> <i class="fa-solid fa-chevron-right"></i></a></li>
+                        <li><a href="admin/institutes.php"><span>Institute Profile</span> <i class="fa-solid fa-chevron-right"></i></a></li>
+                    </ul>
+                    <a href="admin/dashboard.php" class="btn btn-outline btn-sm">
+                        <i class="fa-solid fa-briefcase"></i> Access Admin Portal
+                    </a>
+                </div>
+
+                <!-- Teacher Card -->
+                <div class="portal-card card-teacher">
+                    <div class="portal-header">
+                        <div class="portal-icon">
+                            <i class="fa-solid fa-chalkboard-user"></i>
+                        </div>
+                        <span class="portal-tag">Academics</span>
+                    </div>
+                    <h3 class="portal-name">Teacher Portal</h3>
+                    <p class="portal-desc">
+                        Take instant batch attendance, conduct tests, post marks, compute grades, and track student classroom participation.
+                    </p>
+                    <ul class="portal-links">
+                        <li><a href="teacher/dashboard.php"><span>Teacher Workspace</span> <i class="fa-solid fa-chevron-right"></i></a></li>
+                        <li><a href="teacher/attendance.php"><span>Daily Attendance Marker</span> <i class="fa-solid fa-chevron-right"></i></a></li>
+                        <li><a href="teacher/exams.php"><span>Create & Manage Exams</span> <i class="fa-solid fa-chevron-right"></i></a></li>
+                        <li><a href="teacher/result.php"><span>Enter Test Results</span> <i class="fa-solid fa-chevron-right"></i></a></li>
+                        <li><a href="teacher/fees.php"><span>Fee Verification</span> <i class="fa-solid fa-chevron-right"></i></a></li>
+                    </ul>
+                    <a href="teacher/dashboard.php" class="btn btn-outline btn-sm">
+                        <i class="fa-solid fa-book-open"></i> Access Teacher Portal
+                    </a>
+                </div>
+
+                <!-- Student Card -->
+                <div class="portal-card card-student">
+                    <div class="portal-header">
+                        <div class="portal-icon">
+                            <i class="fa-solid fa-user-graduate"></i>
+                        </div>
+                        <span class="portal-tag">Student / Parent</span>
+                    </div>
+                    <h3 class="portal-name">Student Portal</h3>
+                    <p class="portal-desc">
+                        Enrolled learners can inspect their attendance trends, pay upcoming fees via Razorpay, and download scorecards.
+                    </p>
+                    <ul class="portal-links">
+                        <li><a href="student/dashboard.php"><span>Student Profile & Summary</span> <i class="fa-solid fa-chevron-right"></i></a></li>
+                        <li><a href="student/attendance.php"><span>Attendance History</span> <i class="fa-solid fa-chevron-right"></i></a></li>
+                        <li><a href="student/fees.php"><span>Pay Fees & Invoices</span> <i class="fa-solid fa-chevron-right"></i></a></li>
+                        <li><a href="student/marksheet.php"><span>Print Official Marksheet</span> <i class="fa-solid fa-chevron-right"></i></a></li>
+                        <li><a href="student/result.php"><span>Exam Scorecards</span> <i class="fa-solid fa-chevron-right"></i></a></li>
+                    </ul>
+                    <a href="student/dashboard.php" class="btn btn-outline btn-sm">
+                        <i class="fa-solid fa-graduation-cap"></i> Access Student Portal
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section" id="features">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Key Capabilities</span>
+                <h2 class="section-title">Built for Real-World Coaching Needs</h2>
+                <p class="section-sub">
+                    Clean architecture, automated workflows, and reliable performance out of the box.
+                </p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-box">
+                    <div class="feature-top">
+                        <div class="feature-icon-wrap"><i class="fa-solid fa-calendar-check"></i></div>
+                        <h4>Duplicate-Safe Attendance</h4>
+                    </div>
+                    <p>Re-marking existing batch attendance modifies the same day's record cleanly without duplicate SQL key collisions, keeping parent contact logs synchronized.</p>
+                </div>
+
+                <div class="feature-box">
+                    <div class="feature-top">
+                        <div class="feature-icon-wrap"><i class="fa-solid fa-credit-card"></i></div>
+                        <h4>Razorpay Payment Gateway</h4>
+                    </div>
+                    <p>Integrated order generation, checkout modal, CSRF validation, and webhook listener for instant automated receipt confirmation.</p>
+                </div>
+
+                <div class="feature-box">
+                    <div class="feature-top">
+                        <div class="feature-icon-wrap"><i class="fa-solid fa-file-invoice"></i></div>
+                        <h4>Dynamic Marksheet Generator</h4>
+                    </div>
+                    <p>Calculates percentages, letter grades, and passing statuses automatically from real exam marks, complete with clean print stylesheets.</p>
+                </div>
+
+                <div class="feature-box">
+                    <div class="feature-top">
+                        <div class="feature-icon-wrap"><i class="fa-solid fa-lock"></i></div>
+                        <h4>Strict Role-Based Security</h4>
+                    </div>
+                    <p>Protected by session guards (`auth_check.php`), CSRF token verification on all POST endpoints, and password hashing using Bcrypt.</p>
+                </div>
+
+                <div class="feature-box">
+                    <div class="feature-top">
+                        <div class="feature-icon-wrap"><i class="fa-solid fa-database"></i></div>
+                        <h4>Auto-Provisioned Schema</h4>
+                    </div>
+                    <p>`config/db.php` detects and creates missing database tables (exams, results, payments, users) dynamically so setup is painless.</p>
+                </div>
+
+                <div class="feature-box">
+                    <div class="feature-top">
+                        <div class="feature-icon-wrap"><i class="fa-solid fa-building"></i></div>
+                        <h4>Multi-Institute Isolation</h4>
+                    </div>
+                    <p>Every admin, teacher, and student belongs to a specific institute tenant with auto-scoped data filtering preventing cross-institute leaks.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Master Links Directory Section -->
+    <section class="section" id="directory">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">System Sitemaps</span>
+                <h2 class="section-title">Complete Module Directory & Quick Links</h2>
+                <p class="section-sub">Direct access links to all application pages, APIs, and authentication portals.</p>
+            </div>
+
+            <div class="directory-wrap">
+                <!-- Search Filter Bar -->
+                <div class="dir-search-bar">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="dirSearchInput" placeholder="Quick search any page, dashboard, or endpoint (e.g. 'fees', 'exam', 'attendance', 'admin')...">
+                </div>
+
+                <div class="directory-cols" id="directoryCols">
+                    <!-- Auth Group -->
+                    <div class="dir-group">
+                        <h5><i class="fa-solid fa-key"></i> Authentication</h5>
+                        <ul class="dir-items">
+                            <li><a href="login.php" class="dir-link"><span>Universal Login Portal</span> <span class="badge-file">login.php</span></a></li>
+                            <li><a href="public/auth/login.php" class="dir-link"><span>Public Login Backup</span> <span class="badge-file">public/login</span></a></li>
+                            <li><a href="logout.php" class="dir-link"><span>Session Logout</span> <span class="badge-file">logout.php</span></a></li>
+                            <li><a href="index.php" class="dir-link"><span>Dynamic PHP Router</span> <span class="badge-file">index.php</span></a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Superadmin Group -->
+                    <div class="dir-group">
+                        <h5><i class="fa-solid fa-crown"></i> Super Admin Panel</h5>
+                        <ul class="dir-items">
+                            <li><a href="superadmin/dashboard.php" class="dir-link"><span>Main Dashboard</span> <span class="badge-file">superadmin/dashboard.php</span></a></li>
+                            <li><a href="superadmin/institutes.php" class="dir-link"><span>Institutes Overview</span> <span class="badge-file">superadmin/institutes.php</span></a></li>
+                            <li><a href="superadmin/add_institute.php" class="dir-link"><span>Add New Institute</span> <span class="badge-file">superadmin/add_institute.php</span></a></li>
+                            <li><a href="superadmin/subscriptions.php" class="dir-link"><span>Subscription Plans</span> <span class="badge-file">superadmin/subscriptions.php</span></a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Admin Group -->
+                    <div class="dir-group">
+                        <h5><i class="fa-solid fa-school"></i> Institute Admin Panel</h5>
+                        <ul class="dir-items">
+                            <li><a href="admin/dashboard.php" class="dir-link"><span>Branch Dashboard</span> <span class="badge-file">admin/dashboard.php</span></a></li>
+                            <li><a href="admin/students.php" class="dir-link"><span>Manage Students</span> <span class="badge-file">admin/students.php</span></a></li>
+                            <li><a href="admin/teachers.php" class="dir-link"><span>Manage Teachers</span> <span class="badge-file">admin/teachers.php</span></a></li>
+                            <li><a href="admin/batches.php" class="dir-link"><span>Manage Batches</span> <span class="badge-file">admin/batches.php</span></a></li>
+                            <li><a href="admin/institutes.php" class="dir-link"><span>Institute Details</span> <span class="badge-file">admin/institutes.php</span></a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Teacher Group -->
+                    <div class="dir-group">
+                        <h5><i class="fa-solid fa-chalkboard-user"></i> Faculty Portal</h5>
+                        <ul class="dir-items">
+                            <li><a href="teacher/dashboard.php" class="dir-link"><span>Faculty Dashboard</span> <span class="badge-file">teacher/dashboard.php</span></a></li>
+                            <li><a href="teacher/attendance.php" class="dir-link"><span>Mark Attendance</span> <span class="badge-file">teacher/attendance.php</span></a></li>
+                            <li><a href="teacher/exams.php" class="dir-link"><span>Manage Exams</span> <span class="badge-file">teacher/exams.php</span></a></li>
+                            <li><a href="teacher/result.php" class="dir-link"><span>Input Exam Results</span> <span class="badge-file">teacher/result.php</span></a></li>
+                            <li><a href="teacher/fees.php" class="dir-link"><span>Student Fee Status</span> <span class="badge-file">teacher/fees.php</span></a></li>
+                            <li><a href="teacher/payment.php" class="dir-link"><span>Payment Tracker</span> <span class="badge-file">teacher/payment.php</span></a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Student Group -->
+                    <div class="dir-group">
+                        <h5><i class="fa-solid fa-user-graduate"></i> Student Portal</h5>
+                        <ul class="dir-items">
+                            <li><a href="student/dashboard.php" class="dir-link"><span>Student Dashboard</span> <span class="badge-file">student/dashboard.php</span></a></li>
+                            <li><a href="student/attendance.php" class="dir-link"><span>View Attendance</span> <span class="badge-file">student/attendance.php</span></a></li>
+                            <li><a href="student/fees.php" class="dir-link"><span>Pay Pending Fees</span> <span class="badge-file">student/fees.php</span></a></li>
+                            <li><a href="student/marksheet.php" class="dir-link"><span>Download Marksheet</span> <span class="badge-file">student/marksheet.php</span></a></li>
+                            <li><a href="student/result.php" class="dir-link"><span>Exam Results</span> <span class="badge-file">student/result.php</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Demo Access Helper Card -->
+                <div class="credentials-card" id="credentials">
+                    <div class="cred-header">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <h4>Default Credentials & Testing Notes</h4>
+                    </div>
+                    <p style="color: var(--text-muted); font-size: 14px;">
+                        The universal login page (<code>login.php</code>) detects your user role in MySQL and automatically routes you to the matching dashboard:
+                    </p>
+                    <div class="cred-grid">
+                        <div class="cred-pill">
+                            <div>
+                                <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Super Admin Email</div>
+                                <code>admin@erp.com</code>
+                            </div>
+                            <button class="cred-copy-btn" onclick="copyText('admin@erp.com', this)" title="Copy Email">
+                                <i class="fa-regular fa-copy"></i>
+                            </button>
+                        </div>
+                        <div class="cred-pill">
+                            <div>
+                                <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Default Setup Password</div>
+                                <code>admin123 / custom</code>
+                            </div>
+                            <button class="cred-copy-btn" onclick="copyText('admin123', this)" title="Copy Password">
+                                <i class="fa-regular fa-copy"></i>
+                            </button>
+                        </div>
+                        <div class="cred-pill">
+                            <div>
+                                <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Student / Teacher Accounts</div>
+                                <code>Created in Admin Panel</code>
+                            </div>
+                            <a href="admin/students.php" style="color: var(--secondary); font-size: 13px;">View &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Stack & Architecture -->
+    <section class="section" id="tech-stack" style="padding-top: 20px;">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Technology Stack</span>
+                <h2 class="section-title">Engineered with Robust Tools</h2>
+                <p class="section-sub">Standardized, lightweight, and modern stack built for speed and effortless deployment.</p>
+            </div>
+
+            <div class="tech-pill-wrap">
+                <div class="tech-pill"><i class="fa-brands fa-php" style="color: #8993be;"></i> PHP 8.x Native</div>
+                <div class="tech-pill"><i class="fa-solid fa-database" style="color: #00758f;"></i> MySQL / MariaDB (Prepared Statements)</div>
+                <div class="tech-pill"><i class="fa-brands fa-js" style="color: #f7df1e;"></i> Vanilla JS (Async / Fetch API)</div>
+                <div class="tech-pill"><i class="fa-solid fa-credit-card" style="color: #3395ff;"></i> Razorpay Payment SDK</div>
+                <div class="tech-pill"><i class="fa-brands fa-css3-alt" style="color: #264de4;"></i> Responsive CSS3 + Glassmorphism</div>
+                <div class="tech-pill"><i class="fa-solid fa-shield" style="color: #10b981;"></i> CSRF & Session Security</div>
+                <div class="tech-pill"><i class="fa-solid fa-server" style="color: #fb923c;"></i> Apache / XAMPP Compatible</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="brand-logo" style="margin-bottom: 12px;">
+                        <div class="brand-icon">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
+                        <div class="brand-text">
+                            <h2 style="font-size: 18px; font-weight: 700;">EduCoach ERP</h2>
+                            <span>Coaching Management System</span>
+                        </div>
+                    </div>
+                    <p>
+                        A unified web-based ERP solution designed for modern educational institutes, coaching classes, and academies.
+                    </p>
+                </div>
+
+                <div class="footer-links">
+                    <h5>Quick Navigation</h5>
+                    <ul>
+                        <li><a href="#hero">Home Top</a></li>
+                        <li><a href="login.php">Universal Login</a></li>
+                        <li><a href="admin/dashboard.php">Admin Portal</a></li>
+                        <li><a href="teacher/dashboard.php">Teacher Portal</a></li>
+                        <li><a href="student/dashboard.php">Student Portal</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-links">
+                    <h5>Project Repository</h5>
+                    <ul>
+                        <li><a href="https://github.com/anujrajpoot1252/ERP-SYSTEM-FOR-COACHING" target="_blank"><i class="fa-brands fa-github"></i> GitHub Source Code</a></li>
+                        <li><a href="schema/schema.sql" target="_blank"><i class="fa-solid fa-database"></i> Database Schema</a></li>
+                        <li><a href="README.md" target="_blank"><i class="fa-solid fa-book"></i> Readme Documentation</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div>
+                    &copy; <span id="currentYear"></span> <strong>EduCoach ERP</strong>. Developed by <a href="https://github.com/anujrajpoot1252" target="_blank" style="color: #818cf8; text-decoration: none;">Anuj Rajpoot</a>. All rights reserved.
+                </div>
+                <div>
+                    <a href="https://github.com/anujrajpoot1252/ERP-SYSTEM-FOR-COACHING.git" target="_blank" class="btn btn-github btn-sm">
+                        <i class="fa-brands fa-github"></i> Repository
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Mobile Menu, Search Filter & Copy Text -->
+    <script>
+        // Year
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Mobile Menu Toggle
+        const mobileToggle = document.getElementById('mobileToggle');
+        const navMenu = document.getElementById('navMenu');
+        mobileToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            const icon = mobileToggle.querySelector('i');
+            if (navMenu.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+            } else {
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // Close mobile menu when clicking any nav item
+        document.querySelectorAll('.nav-item a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                const icon = mobileToggle.querySelector('i');
+                if (icon) {
+                    icon.classList.remove('fa-xmark');
+                    icon.classList.add('fa-bars');
+                }
+            });
+        });
+
+        // Search directory items
+        const dirSearchInput = document.getElementById('dirSearchInput');
+        dirSearchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase().trim();
+            const groups = document.querySelectorAll('.dir-group');
+            
+            groups.forEach(group => {
+                const links = group.querySelectorAll('.dir-link');
+                let hasMatch = false;
+                
+                links.forEach(link => {
+                    const text = link.textContent.toLowerCase();
+                    if (text.includes(term)) {
+                        link.parentElement.style.display = 'block';
+                        hasMatch = true;
+                    } else {
+                        link.parentElement.style.display = 'none';
+                    }
+                });
+                
+                group.style.display = hasMatch ? 'block' : 'none';
+            });
+        });
+
+        // Copy credentials helper
+        function copyText(text, btnElement) {
+            navigator.clipboard.writeText(text).then(() => {
+                const origIcon = btnElement.innerHTML;
+                btnElement.innerHTML = '<i class="fa-solid fa-check" style="color: #22c55e;"></i>';
+                setTimeout(() => {
+                    btnElement.innerHTML = origIcon;
+                }, 1800);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+    </script>
+</body>
+</html>
