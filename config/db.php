@@ -35,33 +35,118 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 $env_file = __DIR__ . '/../.env';
 if (is_readable($env_file)) {
-$environment = parse_ini_file($env_file, false, INI_SCANNER_RAW);
-if (is_array($environment)) {
-    foreach ($environment as $key => $value) {
-        if (getenv($key) === false) {
-            putenv($key . '=' . $value);
+    $environment = parse_ini_file($env_file, false, INI_SCANNER_RAW);
+    if (is_array($environment)) {
+        foreach ($environment as $key => $value) {
+            if (getenv($key) === false) {
+                putenv($key . '=' . $value);
+                $_ENV[$key] = $value;
+            }
         }
     }
 }
+
+// Detect environment: Localhost vs InfinityFree Hosting
+$server_host = $_SERVER['HTTP_HOST'] ?? ($_SERVER['SERVER_NAME'] ?? '');
+$is_infinityfree = (strpos($server_host, 'kesug.com') !== false) 
+                || (strpos($server_host, 'epizy.com') !== false)
+                || (strpos($server_host, 'infinityfree') !== false)
+                || (strpos($_SERVER['DOCUMENT_ROOT'] ?? '', 'if0_') !== false);
+
+if ($is_infinityfree) {
+    // InfinityFree Live Settings (Account: if0_43254250)
+    // Ignore default localhost values from .env if present
+    $env_host = getenv('DB_HOST');
+    $host = ($env_host && $env_host !== '127.0.0.1' && $env_host !== 'localhost') 
+        ? $env_host 
+        : 'sql102.infinityfree.com';
+
+    $env_user = getenv('DB_USER');
+    $user = ($env_user && $env_user !== 'root') 
+        ? $env_user 
+        : 'if0_43254250';
+
+    $env_db = getenv('DB_NAME');
+    $database = ($env_db && $env_db !== 'erp_system') 
+        ? $env_db 
+        : 'if0_43254250_erp';
+
+    $pass = (getenv('DB_PASSWORD') !== false && getenv('DB_PASSWORD') !== '') 
+        ? getenv('DB_PASSWORD') 
+        : '';
+} else {
+    // Localhost / XAMPP Settings
+    $host     = getenv('DB_HOST') ?: '127.0.0.1';
+    $user     = getenv('DB_USER') ?: 'root';
+    $pass     = getenv('DB_PASSWORD') !== false ? getenv('DB_PASSWORD') : '';
+    $database = getenv('DB_NAME') ?: 'erp_system';
 }
 
-$host = getenv('DB_HOST') ?: '127.0.0.1';
-$user = getenv('DB_USER') ?: 'root';
-$pass = getenv('DB_PASSWORD') ?: '';
-$database = getenv('DB_NAME') ?: 'erp_system';
 if (!preg_match('/^[A-Za-z0-9_]+$/', $database)) {
-throw new RuntimeException('DB_NAME contains invalid characters.');
+    throw new RuntimeException('DB_NAME contains invalid characters.');
 }
 
 try {
-$conn = mysqli_connect($host, $user, $pass);
-mysqli_set_charset($conn, 'utf8mb4');
-mysqli_query($conn, "CREATE DATABASE IF NOT EXISTS `$database` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
-mysqli_select_db($conn, $database);
+    // Step 1: Direct connect with database name (InfinityFree/cPanel requires direct DB connect)
+    try {
+        $conn = mysqli_connect($host, $user, $pass, $database);
+    } catch (Throwable $e1) {
+        // Step 2: Fallback for local XAMPP if database does not exist yet
+        $conn = mysqli_connect($host, $user, $pass);
+        @mysqli_query($conn, "CREATE DATABASE IF NOT EXISTS `$database` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
+        mysqli_select_db($conn, $database);
+    }
+    mysqli_set_charset($conn, 'utf8mb4');
 } catch (Throwable $exception) {
-error_log('ERP database connection failed: ' . $exception->getMessage());
-http_response_code(500);
-exit('Database connection failed. Check the server configuration and error log.');
+    error_log('ERP database connection failed: ' . $exception->getMessage());
+    http_response_code(500);
+
+    // Friendly diagnostic card so the user knows exactly what is wrong
+    $err_msg = $exception->getMessage();
+    $safe_host = htmlspecialchars($host);
+    $safe_user = htmlspecialchars($user);
+    $safe_db = htmlspecialchars($database);
+
+    echo "<!DOCTYPE html>
+    <html lang='en'>
+    <head>
+        <meta charset='UTF-8'>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <title>Database Connection Error - Coaching ERP</title>
+        <style>
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f172a; color: #f8fafc; padding: 30px 15px; margin: 0; }
+            .error-box { max-width: 640px; margin: 40px auto; background: #1e293b; border: 1px solid #ef4444; border-radius: 12px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+            h2 { color: #f87171; margin-top: 0; font-size: 22px; display: flex; align-items: center; gap: 10px; }
+            .msg { background: #450a0a; border: 1px solid #b91c1c; color: #fca5a5; padding: 12px 16px; border-radius: 8px; font-family: monospace; font-size: 13px; margin: 18px 0; word-break: break-all; }
+            table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 14px; }
+            td { padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+            td strong { color: #94a3b8; }
+            .help { background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); padding: 16px; border-radius: 8px; margin-top: 20px; font-size: 13.5px; line-height: 1.6; color: #c7d2fe; }
+            .help ol { margin-left: 20px; margin-top: 8px; }
+        </style>
+    </head>
+    <body>
+        <div class='error-box'>
+            <h2>⚠️ Database Connection Error</h2>
+            <p>Database server se connect nahi ho paya. Error details neeche di gayi hain:</p>
+            <div class='msg'>Error: " . htmlspecialchars($err_msg) . "</div>
+            <table>
+                <tr><td><strong>MySQL Host:</strong></td><td><code>$safe_host</code></td></tr>
+                <tr><td><strong>MySQL User:</strong></td><td><code>$safe_user</code></td></tr>
+                <tr><td><strong>Database Name:</strong></td><td><code>$safe_db</code></td></tr>
+            </table>
+            <div class='help'>
+                <strong>🔧 Isko Kaise Solve Karein (Fix Steps):</strong>
+                <ol>
+                    <li>InfinityFree Dashboard -> <strong>MySQL Details</strong> me apna actual <strong>MySQL Hostname</strong> (e.g. <code>sql200.infinityfree.com</code>) aur <strong>Password</strong> check karein.</li>
+                    <li>InfinityFree <strong>Control Panel (vPanel) -> MySQL Databases</strong> me jakar ek database banayein (e.g. <code>$safe_db</code>).</li>
+                    <li>In details ko apne root <code>.env</code> file ya <code>config/db.php</code> me update karein.</li>
+                </ol>
+            </div>
+        </div>
+    </body>
+    </html>";
+    exit;
 }
 
 // Initialize only a truly empty database; never run the destructive schema over partial data.
