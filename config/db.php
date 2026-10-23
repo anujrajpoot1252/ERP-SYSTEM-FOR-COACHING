@@ -33,15 +33,18 @@ function app_url($path = '') {
 
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
+$env_vars = [];
 $env_file = __DIR__ . '/../.env';
 if (is_readable($env_file)) {
-    $environment = parse_ini_file($env_file, false, INI_SCANNER_RAW);
-    if (is_array($environment)) {
-        foreach ($environment as $key => $value) {
-            if (getenv($key) === false) {
-                putenv($key . '=' . $value);
-                $_ENV[$key] = $value;
+    $parsed = parse_ini_file($env_file, false, INI_SCANNER_RAW);
+    if (is_array($parsed)) {
+        $env_vars = $parsed;
+        foreach ($parsed as $key => $value) {
+            if (function_exists('putenv')) {
+                @putenv($key . '=' . $value);
             }
+            $_ENV[$key] = $value;
+            $_SERVER[$key] = $value;
         }
     }
 }
@@ -55,31 +58,31 @@ $is_infinityfree = (strpos($server_host, 'kesug.com') !== false)
 
 if ($is_infinityfree) {
     // InfinityFree Live Settings (Account: if0_43254250)
-    // Ignore default localhost values from .env if present
-    $env_host = getenv('DB_HOST');
+    $env_host = $_ENV['DB_HOST'] ?? ($env_vars['DB_HOST'] ?? (function_exists('getenv') ? getenv('DB_HOST') : ''));
     $host = ($env_host && $env_host !== '127.0.0.1' && $env_host !== 'localhost') 
         ? $env_host 
-        : 'sql102.infinityfree.com';
+        : 'sql108.infinityfree.com';
 
-    $env_user = getenv('DB_USER');
+    $env_user = $_ENV['DB_USER'] ?? ($env_vars['DB_USER'] ?? (function_exists('getenv') ? getenv('DB_USER') : ''));
     $user = ($env_user && $env_user !== 'root') 
         ? $env_user 
         : 'if0_43254250';
 
-    $env_db = getenv('DB_NAME');
+    $env_db = $_ENV['DB_NAME'] ?? ($env_vars['DB_NAME'] ?? (function_exists('getenv') ? getenv('DB_NAME') : ''));
     $database = ($env_db && $env_db !== 'erp_system') 
         ? $env_db 
         : 'if0_43254250_erp';
 
-    $pass = (getenv('DB_PASSWORD') !== false && getenv('DB_PASSWORD') !== '') 
-        ? getenv('DB_PASSWORD') 
-        : '';
+    $env_pass = $_ENV['DB_PASSWORD'] ?? ($env_vars['DB_PASSWORD'] ?? (function_exists('getenv') ? getenv('DB_PASSWORD') : ''));
+    $pass = ($env_pass !== false && $env_pass !== '' && $env_pass !== null) 
+        ? $env_pass 
+        : 'Anujrajpoot12';
 } else {
     // Localhost / XAMPP Settings
-    $host     = getenv('DB_HOST') ?: '127.0.0.1';
-    $user     = getenv('DB_USER') ?: 'root';
-    $pass     = getenv('DB_PASSWORD') !== false ? getenv('DB_PASSWORD') : '';
-    $database = getenv('DB_NAME') ?: 'erp_system';
+    $host     = $_ENV['DB_HOST'] ?? ($env_vars['DB_HOST'] ?? '127.0.0.1');
+    $user     = $_ENV['DB_USER'] ?? ($env_vars['DB_USER'] ?? 'root');
+    $pass     = $_ENV['DB_PASSWORD'] ?? ($env_vars['DB_PASSWORD'] ?? '');
+    $database = $_ENV['DB_NAME'] ?? ($env_vars['DB_NAME'] ?? 'erp_system');
 }
 
 if (!preg_match('/^[A-Za-z0-9_]+$/', $database)) {
