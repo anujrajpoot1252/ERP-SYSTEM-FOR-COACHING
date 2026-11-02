@@ -90,14 +90,19 @@ if (!preg_match('/^[A-Za-z0-9_]+$/', $database)) {
 }
 
 try {
-    // Step 1: Direct connect with database name (InfinityFree/cPanel requires direct DB connect)
-    try {
+    // Step 1: Connect to database
+    if ($is_infinityfree) {
+        // InfinityFree/cPanel requires direct DB connect without CREATE DATABASE permissions
         $conn = mysqli_connect($host, $user, $pass, $database);
-    } catch (Throwable $e1) {
-        // Step 2: Fallback for local XAMPP if database does not exist yet
-        $conn = mysqli_connect($host, $user, $pass);
-        @mysqli_query($conn, "CREATE DATABASE IF NOT EXISTS `$database` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
-        mysqli_select_db($conn, $database);
+    } else {
+        // Fallback for local XAMPP if database does not exist yet
+        try {
+            $conn = mysqli_connect($host, $user, $pass, $database);
+        } catch (Throwable $e1) {
+            $conn = mysqli_connect($host, $user, $pass);
+            @mysqli_query($conn, "CREATE DATABASE IF NOT EXISTS `$database` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
+            mysqli_select_db($conn, $database);
+        }
     }
     mysqli_set_charset($conn, 'utf8mb4');
 } catch (Throwable $exception) {

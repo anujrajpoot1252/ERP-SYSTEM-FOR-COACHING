@@ -1,0 +1,28 @@
+# Coaching ERP Apache Configuration (Optimized for InfinityFree & Apache)
+
+# 1. Default Landing Page
+DirectoryIndex index.html index.php
+
+# 2. Character Encoding
+AddDefaultCharset UTF-8
+
+# 3. Security: Block direct HTTP access to sensitive configuration and schema files
+<FilesMatch "^\.(env|git|htaccess)">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+<FilesMatch "^(schema\.sql|\.env)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Prevent directory listings
+Options -Indexes
+
+# 4. HTTP Headers & Caching
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>

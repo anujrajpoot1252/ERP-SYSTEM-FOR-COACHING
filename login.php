@@ -90,7 +90,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ERP Portal - Login</title>
+    <title>Coaching ERP — Sign In</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="stylesheet" href="<?= $base ?>/assets/css/style.css">
 </head>
@@ -101,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <div class="auth-header">
             <i class="fa-solid fa-graduation-cap"></i>
             <h2>Coaching ERP</h2>
-            <p>Enter your credentials to login</p>
+            <p>Enter institutional credentials to access your assigned portal</p>
         </div>
 
         <?php if (!empty($error)): ?>
@@ -128,10 +131,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 </div>
             </div>
 
-            <button type="submit" class="btn-primary">
-                <i class="fa-solid fa-right-to-bracket"></i> Login
+            <button type="submit" class="btn-primary" style="width: 100%;">
+                <i class="fa-solid fa-right-to-bracket"></i> Sign In
             </button>
         </form>
+
+        <div style="text-align: center; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border);">
+            <a href="index.html" style="color: var(--text-muted); font-size: 13px; text-decoration: none; font-weight: 500;">&larr; Return to Portal Directory</a>
+        </div>
     </div>
 </div>
 
