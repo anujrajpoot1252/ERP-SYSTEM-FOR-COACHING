@@ -178,7 +178,7 @@ This project has built-in auto-detection for InfinityFree hosting inside `config
 
 | Role | Email Address | Default Password | Permissions |
 |---|---|---|---|
-| **Super Admin** | `admin@erp.com` | `admin123` | Complete system access & institute provisioning |
+| **Super Admin** | `admin@erp.com` | `axxxxx3` | Complete system access & institute provisioning |
 | **Institute Admin** | *(Created via Superadmin)* | *(Assigned password)* | Admissions, teachers, batches & fees |
 | **Teacher** | *(Created via Admin)* | *(Assigned password)* | Attendance, exams, marks submission |
 | **Student** | *(Created via Admin)* | *(Assigned password)* | Attendance history, marksheet & fees |
